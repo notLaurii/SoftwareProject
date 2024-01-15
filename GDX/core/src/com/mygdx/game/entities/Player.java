@@ -52,7 +52,7 @@ public class Player extends Entity {
 	}	
 	
 	public void moveCamX(float amount) {
-		if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.A)) {
+		if ((Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.A))&&pos.x>MyGdxGame.getWidth()/2&&pos.x<MyGdxGame.gameMap.getPixelWidth()-MyGdxGame.getWidth()/2-1) {
 		Vector2 translation = new Vector2(getDeltaX(amount), 0f);
 		MyGdxGame.cam.translate(translation);
 		MyGdxGame.cam.update();	
@@ -71,12 +71,12 @@ public class Player extends Entity {
 	
 	public void moveCamY(float y) {
 		if(pos.y>MyGdxGame.gameMap.getPixelHeight()/2&&UP==false) {
-		Vector2 translation = new Vector2(0f, MyGdxGame.gameMap.getPixelHeight()-Gdx.graphics.getHeight());
+		Vector2 translation = new Vector2(0f, MyGdxGame.gameMap.getPixelHeight()-MyGdxGame.getHeight());
 		UP=true;
 		MyGdxGame.cam.translate(translation);
 		}
 		else if(pos.y<=MyGdxGame.gameMap.getPixelHeight()/2&&UP==true) {
-		Vector2 translation = new Vector2(0f, -(MyGdxGame.gameMap.getPixelHeight()-Gdx.graphics.getHeight()));
+		Vector2 translation = new Vector2(0f, -(MyGdxGame.gameMap.getPixelHeight()-MyGdxGame.getHeight()));
 		MyGdxGame.cam.translate(translation);
 		UP=false;
 		}
