@@ -16,6 +16,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	
 	public static OrthographicCamera cam;
 	SpriteBatch batch;
+	public static float Width;
+	public static float Height;
 	
 	public static GameMap gameMap;
 	
@@ -25,6 +27,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		Width = Gdx.graphics.getWidth();
+		Height = Gdx.graphics.getHeight();
 		cam.update();
 		
 		gameMap = new TiledGameMap();
@@ -55,6 +59,13 @@ public class MyGdxGame extends ApplicationAdapter {
 		cam.update();
 		gameMap.update(Gdx.graphics.getDeltaTime());
 		gameMap.render(cam, batch);
+	}
+	public static float getWidth() {
+		return Width;
+	}
+
+	public static float getHeight() {
+		return Height;
 	}
 	
 	@Override
