@@ -138,17 +138,17 @@ public class Player extends Entity {
 	
 	public void moveCamY(float y) {
 		if(pos.y>MyGdxGame.gameMap.getPixelHeight()/2&&UP==false) {
-		Vector2 translation = new Vector2(0f, MyGdxGame.gameMap.getPixelHeight()-Gdx.graphics.getHeight());
+		Vector2 translation = new Vector2(0f, MyGdxGame.gameMap.getPixelHeight()-MyGdxGame.getHeight());
 		UP=true;
 		MyGdxGame.cam.translate(translation);
 		}
 		else if(pos.y<=MyGdxGame.gameMap.getPixelHeight()/2&&UP==true) {
-		Vector2 translation = new Vector2(0f, -(MyGdxGame.gameMap.getPixelHeight()-Gdx.graphics.getHeight()));
+		Vector2 translation = new Vector2(0f, -(MyGdxGame.gameMap.getPixelHeight()-MyGdxGame.getHeight()));
 		MyGdxGame.cam.translate(translation);
 		UP=false;
 		}
 		MyGdxGame.cam.update();	
-		//System.out.println(y);
+		System.out.println(y);
 	}
 	
 	public float getY(float y) {
