@@ -1,8 +1,10 @@
 [
-	{
-		type:"player",
-		x:40,
-		y:200,
-		data:{}
-	},
+
+{
+    "type": "Slime",
+    "x": 80,
+    "y": 300,
+    "health": 50,
+    "attackDamage": 5
+  }
 ]

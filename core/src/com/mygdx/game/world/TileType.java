@@ -12,7 +12,7 @@ public enum TileType {
 	WOOD(6, true, "Wood");
 	
 	
-	public static final int TILE_SIZE = 16;
+	public static final int TILE_SIZE = 32;
 	
 	private int id;
 	private boolean collidable;

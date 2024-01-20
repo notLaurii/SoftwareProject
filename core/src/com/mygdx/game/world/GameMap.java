@@ -2,9 +2,12 @@ package com.mygdx.game.world;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Json;
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.entities.EntityData;
 //import com.mygdx.game.entities.EntityLoader;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.Slime;
@@ -17,9 +20,8 @@ public abstract class GameMap {
 	public GameMap() {
 		player = new Player(320,200,this,100,10);
 		entities = new ArrayList<Entity>();
-		//entities.addAll(EntityLoader.loadEntities("entities", this));
 		entities.add(player);
-		entities.add(new Slime(80,200,this,50,5));
+		loadEntitiesFromJson("entities.json");
 	}
 	
 	public void render (OrthographicCamera camera, SpriteBatch batch) {
@@ -27,10 +29,20 @@ public abstract class GameMap {
 			entity.render(batch);
 		}
 	}
-	public void update (float delta) {
-		for(Entity entity : entities) {
-			entity.update(delta, 9.81f);
-		}
+	public void update(float delta) {
+	    ArrayList<Entity> entitiesToRemove = new ArrayList<>();
+
+	    for (Entity entity : entities) {
+	        entity.update(delta, 9.81f);
+
+	        // Überprüfe, ob die Gesundheit null ist und füge sie zur Liste der zu entfernenden Entitäten hinzu
+	        if (entity.getHealth() == 0 && entity.getHealth() < entity.getMaxHealth()) {
+	            entitiesToRemove.add(entity);
+	        }
+	    }
+
+	    // Entferne die Entitäten aus der Liste nach der Iteration
+	    entities.removeAll(entitiesToRemove);
 	}
 	public abstract void dispose ();
 	
@@ -68,5 +80,22 @@ public abstract class GameMap {
 	public int getPixelHeight() {
 		return this.getHeight() * TileType.TILE_SIZE;
 	}
+	 protected void loadEntitiesFromJson(String jsonFilePath) {
+	        Json json = new Json();
+	        ArrayList<EntityData> entityDataList = json.fromJson(ArrayList.class, EntityData.class, Gdx.files.internal(jsonFilePath));
+
+	        for (EntityData entityData : entityDataList) {
+	            entities.add(createEntityFromData(entityData));
+	        }
+	    }
+
+	    private Entity createEntityFromData(EntityData entityData) {
+	        if ("Player".equals(entityData.type)) {
+	            return new Player(entityData.x, entityData.y, this, entityData.health, entityData.attackDamage);
+	        } else if ("Slime".equals(entityData.type)) {
+	            return new Slime(entityData.x, entityData.y, this, entityData.health, entityData.attackDamage);
+	        }
+	        return null;
+	    }
 	
 }

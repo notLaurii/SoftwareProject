@@ -10,15 +10,15 @@ import com.mygdx.game.world.GameMap;
 
 
 public enum EntityType {
-	
-	PLAYER("player", 7, 16, 40),
+
+	PLAYER("player", 16, 24, 40),
 	SLIME("slime", 12, 12, 30);
-	
+
 	private String id;
 	//private Class loaderClass;
 	private int width, height;
 	private float weight;
-	
+
 	private EntityType(String id, int width, int height, float weight) {
 		this.id = id;
 		//this.loaderClass = loaderClass;
@@ -42,26 +42,5 @@ public enum EntityType {
 	public float getWeight() {
 		return weight;
 	}
-	
-	/*public static Entity createEntityUsingSnapshot (EntitySnapshot entitySnapshot, GameMap map) {
-		EntityType type = entityTypes.get(entitySnapshot.type);
-		try {
-			@SuppressWarnings("unchecked")
-			Entity entity = (Entity) ClassReflection.newInstance(type.loaderClass);
-			entity.create(entitySnapshot, type, map);
-			return entity;
-		} catch (ReflectionException e) {
-			Gdx.app.error("Entity Loader", "Could not load entity of type " + type.id);
-			return null;
-		}
-	}
-	
-	private static HashMap<String, EntityType> entityTypes;
-	
-	static {
-		entityTypes = new HashMap<String, EntityType>();
-		for (EntityType type : EntityType.values())
-			entityTypes.put(type.id, type);
-	}*/
-	
+
 }

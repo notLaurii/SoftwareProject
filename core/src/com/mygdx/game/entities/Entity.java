@@ -1,6 +1,9 @@
 package com.mygdx.game.entities;
 
 
+import java.util.ArrayList;
+
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.world.GameMap;
@@ -12,14 +15,16 @@ public abstract class Entity {
 	protected float velocityY = 0;
 	protected GameMap map;
 	protected boolean grounded = false;
+	protected float maxHealth;
 	protected float health;
 	protected float attackDamage;
 	
-	public Entity(float x, float y, EntityType type, GameMap map, float health, float attackDamage) {
+	public Entity(float x, float y, EntityType type, GameMap map, float maxHealth, float attackDamage) {
 		this.pos = new Vector2(x,y);
 		this.type=type;
 		this.map=map;
-		this.health=health;
+		this.maxHealth=maxHealth;
+		this.health=maxHealth;
 		this.attackDamage=attackDamage;
 	}
 	
@@ -28,7 +33,9 @@ public abstract class Entity {
 		this.type = type;
 		this.map = map;
 	}*/
-	
+	public void loadHealthBar() {
+		
+	}
 	public void update (float deltaTime, float gravity) {
 		float newY = pos.y;
 		
@@ -55,13 +62,21 @@ public abstract class Entity {
 			this.pos.x = newX;
 	}
 	
-	public EntitySnapshot getSaveSnapshot() {
+	/*public EntitySnapshot getSaveSnapshot() {
 		
 		return new EntitySnapshot(type.getId(), pos.x, pos.y);
-	}
+	}*/
 
 	public Vector2 getPos() {
 		return pos;
+	}
+
+	public float getMaxHealth() {
+		return maxHealth;
+	}
+
+	public float getHealth() {
+		return health;
 	}
 
 	public float getX() {

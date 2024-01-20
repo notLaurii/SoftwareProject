@@ -12,69 +12,54 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.world.GameMap;
+import com.mygdx.game.world.TileType;
 
 public class Player extends Entity {
 	
 	private static final int SPEED = 80;
-	private static final int JUMP_VELOCITY = 6;
-	private static final float FRAME_DURATION = 0.1f;
+	private static final int JUMP_VELOCITY = 7;
+	private static final float FRAME_DURATION = 0.2f;
 	private boolean UP = false;
 	private float rangeX = 20;
 	private float rangeY = 10;
 	private float attackCooldown = 0;
 	private boolean canAttack = true;
-	private String Skin="Panda";
+	private String skin="PridePanda";
+	protected Texture healthBar;
+	private static final int NUM_HEALTH_BARS = 23;
+    private static final int HEALTH_BAR_WIDTH = 24;
+    private static final int HEALTH_BAR_HEIGHT = 6;
 	
-	 private Texture[] animationFrames;
-	    private int currentFrame = 0;
-	    private float stateTime = 0;
+    private Texture animationTexture;
+    private int frameWidth;
+    private int frameHeight;
+    private int frameCount;
+    private int currentFrame = 0;
+    private float stateTime = 0;
 	
 	Texture image;
 	
-	public Player(float x, float y, GameMap map, float health, float attackDamage) {
-		super(x, y, EntityType.PLAYER, map, health, attackDamage);
-		//loadAnimationFrames(Skin, "StandStill");
-		image = new Texture("PlayerAnimations/PridePanda/PridePandaFront.png");
+	public Player(float x, float y, GameMap map, float maxHealth, float attackDamage) {
+		super(x, y, EntityType.PLAYER, map, maxHealth, attackDamage);
+		loadAnimationFrames(skin, "StandStill");
+		//image = new Texture("PlayerAnimations/" + Skin +"/WalkRight/"+ Skin +"WalkRight1.png");
+		healthBar=new Texture("PlayerHealthBar.png");
 	}
 	
 	 private void loadAnimationFrames(String playerSkin, String animation) {
-	        // Lade die einzelnen Frames der Animation hier, z.B., indem du ein Texture-Array erstellst.
-	        // Ersetze dies durch deine eigene Implementierung entsprechend der Anzahl der Frames in deiner GIF-Datei.
-		 if(playerSkin=="Panda") {
-			 if(animation=="GoRight") {
-	        animationFrames = new Texture[]{
-	        		
-	                new Texture("PlayerAnimations/PridePanda/WalkRight/PridePandaWalkRight1.png"),
-	                new Texture("PlayerAnimations/PridePanda/WalkRight/PridePandaWalkRight2.png"),
-	                new Texture("PlayerAnimations/PridePanda/WalkRight/PridePandaWalkRight3.png"),
-	                new Texture("PlayerAnimations/PridePanda/WalkRight/PridePandaWalkRight4.png"),
-	                new Texture("PlayerAnimations/PridePanda/WalkRight/PridePandaWalkRight5.png"),
-	                new Texture("PlayerAnimations/PridePanda/WalkRight/PridePandaWalkRight6.png"),
-	                new Texture("PlayerAnimations/PridePanda/WalkRight/PridePandaWalkRight7.png"),
-	                new Texture("PlayerAnimations/PridePanda/WalkRight/PridePandaWalkRight8.png"),
-	        };
-			 }
-			 if(animation=="GoLeft") {
-				 animationFrames = new Texture[]{
-			        		
-			                new Texture("PlayerAnimations/PridePanda/WalkLeft/PridePandaWalkLeft1.png"),
-			                new Texture("PlayerAnimations/PridePanda/WalkLeft/PridePandaWalkLeft2.png"),
-			                new Texture("PlayerAnimations/PridePanda/WalkLeft/PridePandaWalkLeft3.png"),
-			                new Texture("PlayerAnimations/PridePanda/WalkLeft/PridePandaWalkLeft4.png"),
-			                new Texture("PlayerAnimations/PridePanda/WalkLeft/PridePandaWalkLeft5.png"),
-			                new Texture("PlayerAnimations/PridePanda/WalkLeft/PridePandaWalkLeft6.png"),
-			                new Texture("PlayerAnimations/PridePanda/WalkLeft/PridePandaWalkLeft7.png"),
-			                new Texture("PlayerAnimations/PridePanda/WalkLeft/PridePandaWalkLeft8.png"),
-				};
-			 }
-			 if(animation=="StandStill") {
-				 animationFrames = new Texture[]{
-			        		
-			                new Texture("PlayerAnimations/PridePanda/PridePandaFront.png"),
-				 };
-			 }
-		 	}
-	    }
+		if(animation=="GoRight") {
+	       animationTexture = new Texture ("PlayerAnimations/" + skin + "/WalkRight/" + skin + "WalkRight.png");
+		}
+		else if(animation=="GoLeft") {
+			animationTexture = new Texture ("PlayerAnimations/" + skin + "/WalkLeft/" + skin + "WalkLeft.png");
+		}
+		else if(animation=="StandStill") {
+			animationTexture = new Texture("PlayerAnimations/" + skin + "/" + skin + "Front.png");
+		}
+		frameCount = 8;
+		frameWidth = animationTexture.getWidth() / frameCount;
+		frameHeight = animationTexture.getHeight();
+	}
 
 	
 	/*@Override
@@ -100,17 +85,17 @@ public class Player extends Entity {
 		if (Gdx.input.isKeyPressed(Keys.A)) {
 			moveCamX(-SPEED * deltaTime);
 			moveX(-SPEED * deltaTime);
-			//loadAnimationFrames(Skin, "GoLeft");
+			loadAnimationFrames(skin, "GoLeft");
 		}
 			
 		
 		if (Gdx.input.isKeyPressed(Keys.D)) {
 			moveCamX(SPEED * deltaTime);
 			moveX(SPEED * deltaTime);
-			//loadAnimationFrames(Skin, "GoRight");
+			loadAnimationFrames(skin, "GoRight");
 		}
 		moveCamY(pos.y);
-		//updateAnimation(deltaTime);
+		updateAnimation(deltaTime);
 	}
 
 	public void moveCamX(float amount) {
@@ -137,18 +122,14 @@ public class Player extends Entity {
 	}
 	
 	public void moveCamY(float y) {
-		if(pos.y>MyGdxGame.gameMap.getPixelHeight()/2&&UP==false) {
-		Vector2 translation = new Vector2(0f, MyGdxGame.gameMap.getPixelHeight()-MyGdxGame.getHeight());
-		UP=true;
-		MyGdxGame.cam.translate(translation);
-		}
-		else if(pos.y<=MyGdxGame.gameMap.getPixelHeight()/2&&UP==true) {
-		Vector2 translation = new Vector2(0f, -(MyGdxGame.gameMap.getPixelHeight()-MyGdxGame.getHeight()));
-		MyGdxGame.cam.translate(translation);
-		UP=false;
-		}
+		int heightLevel=(int) Math.floor((pos.y+getHeight())/MyGdxGame.getHeight());
+		if(heightLevel==0)
+			MyGdxGame.cam.position.y = MyGdxGame.getHeight()/2;
+		else if(heightLevel*MyGdxGame.getHeight()+MyGdxGame.getHeight()/2>MyGdxGame.gameMap.getPixelHeight()-MyGdxGame.getHeight()/2+TileType.TILE_SIZE)
+			MyGdxGame.cam.position.y = MyGdxGame.gameMap.getPixelHeight()-MyGdxGame.getHeight()/2;
+		else
+		MyGdxGame.cam.position.y = heightLevel*MyGdxGame.getHeight()+MyGdxGame.getHeight()/2-TileType.TILE_SIZE;
 		MyGdxGame.cam.update();	
-		System.out.println(y);
 	}
 	
 	public float getY(float y) {
@@ -159,14 +140,25 @@ public class Player extends Entity {
 	
 	 private void updateAnimation(float deltaTime) {
 	        stateTime += deltaTime;
-	        currentFrame = (int) (stateTime / FRAME_DURATION) % animationFrames.length;
+	        currentFrame = (int) (stateTime / FRAME_DURATION) % frameCount;
 	    }
 		
 	@Override
 	public void render(SpriteBatch batch) {
-		//batch.draw(animationFrames[currentFrame], pos.x, pos.y, getWidth(), getHeight());
-		batch.draw(image, pos.x, pos.y, getWidth(), getHeight());
-	}
+		 // CharacterAnimation rendern
+	    float frameX = currentFrame * frameWidth;
+	    float frameY = 0; // Der Y-Wert im Bild bleibt 0, da es sich um eine einzelne Zeile handelt
+
+        // HealthBar rendern
+	    float healthRatio = health / maxHealth;
+        int numBarsToShow = (int) (healthRatio * NUM_HEALTH_BARS);
+        int textureY = NUM_HEALTH_BARS - numBarsToShow;
+
+        // Zeichnen der Bilder
+        batch.draw(animationTexture, pos.x, pos.y, 0, 0, getWidth(), getHeight(), 1, 1, 0, (int)frameX, (int)frameY, frameWidth, frameHeight, false, false);
+        batch.draw(healthBar, pos.x+getWidth()/2-HEALTH_BAR_WIDTH/2, (float) (pos.y + 1.1*getHeight()), HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT,
+                   0, HEALTH_BAR_HEIGHT * textureY, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT, false, false);
+    }
 
 	
 	public void attack(float attackRangeX, float attackRangeY) {

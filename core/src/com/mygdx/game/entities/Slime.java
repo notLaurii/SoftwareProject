@@ -89,6 +89,7 @@ public class Slime extends Enemy {
 	@Override
 	public void render(SpriteBatch batch) {
 		batch.draw(image, pos.x, pos.y, getWidth(), getHeight());
+		super.render(batch);
 
 	}
 
