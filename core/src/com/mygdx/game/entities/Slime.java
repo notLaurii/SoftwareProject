@@ -10,8 +10,11 @@ public class Slime extends Enemy {
 	private static final int SPEED = 60;
 	private static final int JUMP_VELOCITY = 6;
 	private int air = 0;
-	private float rangeX=0;
-	private float rangeY=0;
+
+	private float playerDetectionRangeX=182;
+	private float playerDetectionRangeY=64;
+	private float attackRangeX=0;
+	private float attackRangeY=0;
 	
 	Texture image;
 	int health;
@@ -51,23 +54,26 @@ public class Slime extends Enemy {
 			}
 		}
 		else {
-			if (randomNumberGenerator (0,1)==0 && !grounded &&this.velocityY > 0)
+			if (randomNumberGenerator(0, 1) == 0 && !grounded && this.velocityY > 0)
 				this.velocityY += JUMP_VELOCITY * getWeight() * deltaTime;
-			if (air == 0) {
-				int randomNumber2 = randomNumberGenerator (1, 2);
-				if (randomNumber2==1) {
-					air = 1;
+			if (!isPlayerInRange(GameMap.player, playerDetectionRangeX, playerDetectionRangeY)) {
+				if (air == 0) {
+					int randomNumber2 = randomNumberGenerator(1, 2);
+					if (randomNumber2 == 1) {
+						air = 1;
+					} else if (randomNumber2 == 2) {
+						air = 2;
+					}
 				}
-				else if (randomNumber2==2) {
-					air = 2;
+				if (air == 1) {
+					moveX(SPEED * deltaTime);
+				} else if (air == 2) {
+					moveX(-SPEED * deltaTime);
 				}
-			}
-			if (air==1) {
-				moveX(SPEED * deltaTime);
-			}
-			else if (air==2) {
-				moveX(-SPEED * deltaTime);
-			}
+			} else if(GameMap.player.pos.x>=this.pos.x)
+				air=1;
+			else
+				air=2;
 		}
 		
 		
@@ -82,7 +88,7 @@ public class Slime extends Enemy {
 	}
 	
 	public void attackPlayer(Player player) {
-		if(grounded&&isPlayerInRange(GameMap.player, rangeX, rangeY ))
+		if(grounded&&isPlayerInRange(GameMap.player, attackRangeX, attackRangeY ))
 			player.takeDamage(attackDamage);
 	}
 	
