@@ -13,6 +13,7 @@ public enum EntityType {
 
 	PLAYER("player", 16, 24, 40),
 	SLIME("slime", 12, 12, 30);
+	BOOMERANG("boomerang", 12, 12, 0);
 
 	private String id;
 	//private Class loaderClass;
