@@ -1,0 +1,10 @@
+[
+
+{
+    "type": "Slime",
+    "x": 80,
+    "y": 300,
+    "health": 50,
+    "attackDamage": 5
+  }
+]
