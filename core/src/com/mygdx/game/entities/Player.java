@@ -36,6 +36,7 @@ public class Player extends Entity {
     private int frameCount;
     private int currentFrame = 0;
     private float stateTime = 0;
+	private Boomerang boomerang;
 	
 	Texture image;
 	
@@ -44,6 +45,7 @@ public class Player extends Entity {
 		loadAnimationFrames(skin, "StandStill");
 		//image = new Texture("PlayerAnimations/" + Skin +"/WalkRight/"+ Skin +"WalkRight1.png");
 		healthBar=new Texture("PlayerHealthBar.png");
+		boomerang = new Boomerang(x, y, map, this);
 	}
 	
 	 private void loadAnimationFrames(String playerSkin, String animation) {
@@ -96,6 +98,8 @@ public class Player extends Entity {
 		}
 		moveCamY(pos.y);
 		updateAnimation(deltaTime);
+
+		boomerang.update(deltaTime, gravity);
 	}
 
 	public void moveCamX(float amount) {
