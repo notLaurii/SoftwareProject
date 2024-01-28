@@ -12,6 +12,7 @@ import com.mygdx.game.entities.Player;
 import com.mygdx.game.world.GameMap;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static com.mygdx.game.world.GameMap.entities;
 
@@ -45,12 +46,14 @@ public class BoomerangProjectile extends Projectile {
             GameMap.entitiesToRemove.add(this);
         currentSpeed -= speed * deltaTime / (normalAirTime /2);
         float delta = currentSpeed * deltaTime;
-        if(this.direction=="Left") {
+        if(Objects.equals(this.direction, "Left")) {
             if(map.doesEntityCollideWithMap(getX()-delta, getY(), getWidth(), getHeight())) {
-                airTime = normalAirTime / 2;
-                currentSpeed = 0;
+                if (airTime < normalAirTime / 2) {
+                    airTime = normalAirTime / 2;
+                    currentSpeed = 0;
+                }
             }
-            if (airTime > normalAirTime / 2&&this.getX() > shooter.getX())
+            if (airTime > normalAirTime / 2&&(this.getX() > shooter.getX()||map.doesEntityCollideWithMap(getX()-delta, getY(), getWidth(), getHeight())))
                 GameMap.entitiesToRemove.add(this);
             moveX(-delta);
         }
@@ -62,16 +65,12 @@ public class BoomerangProjectile extends Projectile {
                 }
                 else GameMap.entitiesToRemove.add(this);
             }
-            if (airTime > normalAirTime / 2&&this.getX() < shooter.getX())
+            if (airTime > normalAirTime / 2&&(this.getX() < shooter.getX()||map.doesEntityCollideWithMap(getX()-delta, getY(), getWidth(), getHeight())))
                 GameMap.entitiesToRemove.add(this);
                 moveX(delta);
         }
     }
-
-    public void setVisible(boolean isVisible) {
-        this.visible = isVisible;
-    }
-
+    
     @Override
     public void render(SpriteBatch batch) {
         float originX = getWidth() / 2f;
