@@ -1,0 +1,15 @@
+[
+  {
+    "type": "Player",
+    "id": 1,
+    "x": 300,
+    "y": 300,
+    "maxHealth": 100,
+    "attackDamage": 10,
+    "speed": 80,
+    "jumpVelocity": 5,
+    "weaponID": "Boomerang",
+    "skin": "Susanna"
+  }
+]
+
