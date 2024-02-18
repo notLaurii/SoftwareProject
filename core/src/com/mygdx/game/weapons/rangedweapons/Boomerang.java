@@ -6,8 +6,8 @@ import com.mygdx.game.world.GameMap;
 
 import java.util.ArrayList;
 
-import static com.mygdx.game.world.GameMap.entities;
-import static com.mygdx.game.world.GameMap.entitiesToAdd;
+import static com.mygdx.game.management.MyGdxGame.levelManager;
+
 
 public class Boomerang extends RangedWeapon{
 
@@ -17,7 +17,7 @@ public class Boomerang extends RangedWeapon{
     public void attack(float playerDamage) {
         if(this.getCanAttack()) {
             BoomerangProjectile boomerangProjectile = new BoomerangProjectile(getMap(), getWielder(), getAttackDamage());
-            entitiesToAdd.add(boomerangProjectile);
+            levelManager.entitiesToAdd.add(boomerangProjectile);
             this.startAttackCooldown(this.getMaxCooldown());
         }
     }
