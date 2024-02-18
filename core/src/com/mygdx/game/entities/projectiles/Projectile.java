@@ -7,9 +7,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.EntityType;
 import com.mygdx.game.entities.Player;
+import com.mygdx.game.management.LevelManager;
 import com.mygdx.game.world.GameMap;
 
 import java.util.ArrayList;
+
+import static com.mygdx.game.management.MyGdxGame.levelManager;
 
 public abstract class Projectile extends Entity {
         protected int speed;
@@ -20,7 +23,7 @@ public abstract class Projectile extends Entity {
         protected ArrayList<Entity> entitiesHit= new ArrayList<>();
 
         public Projectile(float x, float y, EntityType type, GameMap map, float attackDamage, Entity shooter) {
-            super(x, y, type, map, 100, attackDamage);
+            super(x, y, type, "projectile", map, 100, attackDamage);
             this.shooter=shooter;
         }
 
@@ -30,7 +33,7 @@ public abstract class Projectile extends Entity {
         }
 
     public void checkHit(float damage) {
-        ArrayList<Entity> entities = GameMap.entities;
+        ArrayList<Entity> entities = levelManager.entities;
         for(Entity entity : entities) {
             if (entity != getShooter() && entity != this && entity.isEntityInRange(this, 0, 0)) {
                     if (!entitiesHit.contains(entity)) {

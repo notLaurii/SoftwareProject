@@ -8,6 +8,9 @@ import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.enemies.Enemy;
 import com.mygdx.game.world.GameMap;
 
+import static com.mygdx.game.management.MyGdxGame.gameManager;
+import static com.mygdx.game.management.MyGdxGame.levelManager;
+
 public class Slime extends Enemy {
 
 	private static float speed;
@@ -35,7 +38,7 @@ public class Slime extends Enemy {
 		if (canAct) {
 			if (grounded)
 				if (justLanded) {
-					attackPlayer(GameMap.player, attackRangeX, attackRangeY);
+					attackPlayer(levelManager.getPlayer(), attackRangeX, attackRangeY);
 					startCooldown(0.3f);
 					jumpDirection = 0;
 					justLanded = false;
@@ -43,7 +46,7 @@ public class Slime extends Enemy {
 					this.velocityY += jumpVelocity * getWeight();
 					justLanded = true;
 				}
-			if (!isEntityInRange(GameMap.player, playerDetectionRangeX, playerDetectionRangeY)) {
+			if (!isEntityInRange(levelManager.getPlayer(), playerDetectionRangeX, playerDetectionRangeY)) {
 				if (jumpDirection == 0) {
 					int randomNumber2 = randomNumberGenerator(1, 2);
 					if (randomNumber2 == 1) {
@@ -53,9 +56,9 @@ public class Slime extends Enemy {
 					}
 				}
 
-			} else if (isEntityInRangeX(GameMap.player, attackRangeX))
+			} else if (isEntityInRangeX(levelManager.getPlayer(), attackRangeX))
 				jumpDirection=0;
-			else if (GameMap.player.getX() >= this.pos.x)
+			else if (levelManager.getPlayer().getX() >= this.pos.x)
 				jumpDirection = 1;
 			else
 				jumpDirection = 2;

@@ -23,14 +23,16 @@ public abstract class Entity {
 	protected float health;
 	protected float attackDamage;
 	private String direction = "Right";
+	private String category;
 	
-	public Entity(float x, float y, EntityType type, GameMap map, float maxHealth, float attackDamage) {
+	public Entity(float x, float y, EntityType type, String category, GameMap map, float maxHealth, float attackDamage) {
 		this.pos = new Vector2(x,y);
 		this.type=type;
 		this.map=map;
 		this.maxHealth=maxHealth;
 		this.health=maxHealth;
 		this.attackDamage=attackDamage;
+		this.category=category;
 	}
 	
 	/*public void create (EntitySnapshot snapshot, EntityType type, GameMap map) {
@@ -139,11 +141,10 @@ public abstract class Entity {
 			this.health-=attackDamage;
 	}
 	public void attackPlayer(Player player, float attackRangeX, float attackRangeY) {
-		if(isEntityInRange(GameMap.player, attackRangeX, attackRangeY ))
+		if(isEntityInRange(player, attackRangeX, attackRangeY ))
 			player.takeDamage(attackDamage);
 	}
 	public Weapon assignWeapon(String weaponID) {
-		System.out.println(weaponID);
 		if ("Fists".equals(weaponID))
 			return new Fists(map, this);
 		else if ("Boomerang".equals(weaponID)) {
@@ -153,5 +154,7 @@ public abstract class Entity {
 	}
 	public String getDirection() {return direction;}
 	public void setDirection(String newDirection) {direction=newDirection;}
+
+	public String getCategory() {return category;}
 }
 

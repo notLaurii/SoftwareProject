@@ -5,16 +5,16 @@ import com.mygdx.game.weapons.Weapon;
 import static com.mygdx.game.world.GameMap.player;
 
 public class EntityData {
-    public String type;
-    public int id;
-    public float x;
-    public float y;
-    public float maxHealth;
-    public float attackDamage;
-    public float speed;
-    public float jumpVelocity;
-    public String weaponID;
-    public String skin;
+    private String type;
+    private int id;
+    private float x;
+    private float y;
+    private float maxHealth;
+    private float attackDamage;
+    private float speed;
+    private float jumpVelocity;
+    private String weaponID;
+    private String skin;
 
     public String getType() {
         return type;

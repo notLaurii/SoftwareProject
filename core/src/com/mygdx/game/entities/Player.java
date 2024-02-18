@@ -43,12 +43,11 @@ public class Player extends Entity {
 	Texture image;
 
 	public Player(int id, float x, float y, GameMap map, float maxHealth, float attackDamage, float speed, float jumpVelocity, String weaponID, String skin) {
-		super(x, y, EntityType.PLAYER, map, maxHealth, attackDamage);
+		super(x, y, EntityType.PLAYER, "player", map, maxHealth, attackDamage);
 		this.speed=speed;
 		this.jumpVelocity=jumpVelocity;
 		this.weaponID=weaponID;
 		this.weapon=assignWeapon(weaponID);
-		System.out.println(this.weaponID);
 		this.skin=skin;
 		loadAnimationFrames("Stand", 0, 0);
 		healthBar=new Texture("Entity/Player/Overlay/PlayerHealthBar.png");
@@ -58,8 +57,6 @@ public class Player extends Entity {
 	private void loadAnimationFrames(String animation, int priority, float deltaTime) {
 		String data="";
 		if(!animation.equals(currentAnimation)&&(animationTimer>frameCount*frameDuration||priority>=currentPriority)) {
-			if(animationTimer>=frameCount*frameDuration)
-				System.out.println(animationTimer);
 		if(animation=="Walk") {
 			frameCount = 8;
 			frameDuration = 0.1f;

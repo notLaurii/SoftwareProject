@@ -9,12 +9,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.EntityType;
 import com.mygdx.game.entities.Player;
+import com.mygdx.game.management.LevelManager;
 import com.mygdx.game.world.GameMap;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static com.mygdx.game.world.GameMap.entities;
+import static com.mygdx.game.management.MyGdxGame.levelManager;
 
 public class BoomerangProjectile extends Projectile {
 
@@ -43,7 +44,7 @@ public class BoomerangProjectile extends Projectile {
         super.update(deltaTime, gravity);
         airTime += deltaTime;
         if (airTime >= maxAirTime)
-            GameMap.entitiesToRemove.add(this);
+            levelManager.entitiesToRemove.add(this);
         currentSpeed -= speed * deltaTime / (normalAirTime /2);
         float delta = currentSpeed * deltaTime;
         if(Objects.equals(this.direction, "Left")) {
@@ -54,7 +55,7 @@ public class BoomerangProjectile extends Projectile {
                 }
             }
             if (airTime > normalAirTime / 2&&(this.getX() > shooter.getX()||map.doesEntityCollideWithMap(getX()-delta, getY(), getWidth(), getHeight())))
-                GameMap.entitiesToRemove.add(this);
+                levelManager.entitiesToRemove.add(this);
             moveX(-delta);
         }
             else {
@@ -63,10 +64,10 @@ public class BoomerangProjectile extends Projectile {
                     airTime = normalAirTime / 2;
                     currentSpeed = 0;
                 }
-                else GameMap.entitiesToRemove.add(this);
+                else levelManager.entitiesToRemove.add(this);
             }
             if (airTime > normalAirTime / 2&&(this.getX() < shooter.getX()||map.doesEntityCollideWithMap(getX()-delta, getY(), getWidth(), getHeight())))
-                GameMap.entitiesToRemove.add(this);
+                levelManager.entitiesToRemove.add(this);
                 moveX(delta);
         }
     }
