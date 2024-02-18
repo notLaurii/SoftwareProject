@@ -9,18 +9,22 @@ import com.mygdx.game.entities.Player;
 
 import java.util.ArrayList;
 
-import static com.mygdx.game.world.GameMap.player;
 
+//Speichert Spielstände und Stats des Spielers
 public class GameSaver {
-    private static int level;
+    private int level;
+    private GameManager gameManager;
+    private boolean saved=true;
     private String fileFromPath;
-    public static void update(float deltaTime) {
-        if (LevelManager.noEnemiesLeft()) {
-            savePlayerData(player);
-        }
+
+    public GameSaver(int level, GameManager gameManager) {
+        this.gameManager=gameManager;
     }
 
-    public static void savePlayerData(Player player) {
+    public void update(float deltaTime) {
+    }
+
+    public void savePlayerData(Player player) {
         String fileToPath="playerData.json";
         ArrayList<EntityData> dataList = readEntityDataFromFile(fileToPath);
         // Durchlaufe die Liste und suche nach dem Spieler
@@ -37,7 +41,7 @@ public class GameSaver {
 
         writeEntityDataToFile(fileToPath, dataList);
     }
-    public static void saveGameProgress(Player player) {
+    public void saveGameProgress(Player player) {
         String fileToPath="gameProgress.json";
         ArrayList<GameProgress> dataList = readGameProgressFromFile(fileToPath);
         // Durchlaufe die Liste und suche nach dem Spieler
@@ -47,6 +51,7 @@ public class GameSaver {
                 //data.setAbilitiesUnlocked();
                 //data.setWeaponsUnlocked();
                 //data.setSkinsUnlocked();
+                data.setLevel(gameManager.getLevel());
                 break;
             }
         }
@@ -104,5 +109,8 @@ public class GameSaver {
         // Schreibe die Daten in die Datei
         FileHandle file = Gdx.files.local(filePath);
         file.writeString(jsonData, false);
+    }
+    public void setSaved(boolean value) {
+        this.saved=value;
     }
 }

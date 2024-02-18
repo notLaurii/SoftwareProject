@@ -3,9 +3,7 @@ package com.mygdx.game.management;
 import com.mygdx.game.weapons.Weapon;
 
 import java.util.List;
-
-import static com.mygdx.game.world.GameMap.player;
-
+//Speichert Attribute der Spielstände
 public class GameProgress {
     private int playerId;
     private int level;
