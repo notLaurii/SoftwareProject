@@ -2,7 +2,6 @@ package com.mygdx.game.entities;
 
 import com.mygdx.game.weapons.Weapon;
 
-import static com.mygdx.game.world.GameMap.player;
 
 public class EntityData {
     private String type;

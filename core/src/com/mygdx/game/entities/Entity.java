@@ -10,13 +10,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.weapons.Weapon;
 import com.mygdx.game.weapons.melees.Fists;
 import com.mygdx.game.weapons.rangedweapons.Boomerang;
+import com.mygdx.game.weapons.rangedweapons.Donut;
 import com.mygdx.game.world.GameMap;
 
 public abstract class Entity {
 	
 	protected Vector2 pos;
 	protected EntityType type;
-	protected float velocityY = 0;
+	protected float velocityY;
 	protected GameMap map;
 	protected boolean grounded = false;
 	protected float maxHealth;
@@ -24,6 +25,16 @@ public abstract class Entity {
 	protected float attackDamage;
 	private String direction = "Right";
 	private String category;
+	private float animationTimer;
+	protected int currentPriority;
+	protected String currentAnimation;
+	protected int frameWidth;
+	protected int frameHeight;
+	private int frameCount;
+	protected int currentFrame;
+	protected Texture animationTexture;
+	private float stateTime = 0;
+	private static float frameDuration = 0.2f;
 	
 	public Entity(float x, float y, EntityType type, String category, GameMap map, float maxHealth, float attackDamage) {
 		this.pos = new Vector2(x,y);
@@ -150,11 +161,31 @@ public abstract class Entity {
 		else if ("Boomerang".equals(weaponID)) {
 			return new Boomerang(this.getX(), this.getY() + this.getHeight() / 2, map, this);
 		}
+		else if ("Donut".equals(weaponID)) {
+			return new Donut(this.getX(), this.getY() + this.getHeight() / 2, map, this);
+		}
 		return null;
 	}
 	public String getDirection() {return direction;}
 	public void setDirection(String newDirection) {direction=newDirection;}
 
 	public String getCategory() {return category;}
+
+	public void loadAnimationFrames(String animation, int priority, float deltaTime, int frameAmount, float frameDuration, String path) {
+		if (!animation.equals(currentAnimation) && (animationTimer > frameCount * frameDuration || priority >= currentPriority)) {
+			this.animationTimer = 0;
+			this.animationTexture = new Texture(path);
+			this.currentPriority = priority;
+			this.currentAnimation = animation;
+			this.frameCount=frameAmount;
+		}
+		this.frameWidth = animationTexture.getWidth() / frameCount;
+		this.frameHeight = animationTexture.getHeight();
+		this.animationTimer += deltaTime;
+	}
+	public void updateAnimation(float deltaTime) {
+		this.stateTime += deltaTime;
+		this.currentFrame = (int) (stateTime / frameDuration) % frameCount;
+	}
 }
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import static com.mygdx.game.management.MyGdxGame.*;
 
 public class GameManager {
@@ -15,7 +16,8 @@ public class GameManager {
     }
 
     public void update(float deltaTime) {
-            if(levelManager.isEntitiesCreated()&&levelManager.noEnemiesLeft()&&(Math.ceil(levelManager.getPlayer().getX())>=(gameMap.getPixelWidth()-levelManager.getPlayer().getWidth()))) {
+        if(Math.ceil(levelManager.getPlayer().getX())>=(gameMap.getPixelWidth()-levelManager.getPlayer().getWidth()))
+            if(levelManager.isEntitiesCreated()&&levelManager.noEnemiesLeft()) {
                 if (level == room) {
                     System.out.println(level + "; " + room);
                     setLevel(level + 1);
@@ -25,7 +27,7 @@ public class GameManager {
                     gameSaver.savePlayerData(levelManager.getPlayer());
                     gameSaver.saveGameProgress(levelManager.getPlayer());
                     if (folder.exists())
-                        levelManager.switchLevel();
+                        levelManager.switchSetting(gameManager.getLevel());
                     else {
                         goToMainRoom();
                         System.out.println(room + " vs. " + level);
@@ -36,7 +38,7 @@ public class GameManager {
 
     public void goToMainRoom() {
         room=0;
-        levelManager.switchLevel(room);
+        levelManager.switchSetting(room);
     }
 
     public int getLevel() {

@@ -33,7 +33,7 @@ public class BoomerangProjectile extends Projectile {
     public BoomerangProjectile(GameMap map, Entity shooter, float damage) {
         super(shooter.getX(), shooter.getY(), EntityType.BOOMERANG, map, 0, shooter);
         this.damage=damage;
-        this.image=new Texture("Entity/Projectile/boomerang.png");
+        this.image=new Texture("Entity/Projectile/boomerangProjectile.png");
         this.direction=getShooter().getDirection();
     }
 
