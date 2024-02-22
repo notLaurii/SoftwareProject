@@ -1,17 +1,72 @@
 package com.mygdx.game.world;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import static com.mygdx.game.management.MyGdxGame.gameManager;
+import com.badlogic.gdx.utils.Json;
+import com.mygdx.game.entities.Entity;
+import com.mygdx.game.entities.EntityData;
+//import com.mygdx.game.entities.EntityLoader;
+import com.mygdx.game.entities.Player;
+import com.mygdx.game.entities.Slime;
 
 public abstract class GameMap {
 	
+	public static Player player;
+	public static ArrayList<Entity> entities;
+	private static String level;
+	
 	public GameMap() {
+		entities = new ArrayList<Entity>();
+		loadEntitiesFromJson("entities"+getLevel()+".json");
+		player = (Player) entities.get(0);
 	}
 	
 	public void render (OrthographicCamera camera, SpriteBatch batch) {
+		for(Entity entity : entities) {
+			entity.render(batch);
+		}
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+	public ArrayList<Entity>  getEntities() {
+		return entities;
+	}
+	public String getLevel() {
+		return level;
+	}
+	public void nextLevel() {
+		if(room!=3)
+		level =
 	}
 	public void update(float delta) {
+	        removeEntities(delta);
+			if(checkIfLevelCleared())
+				System.out.println("You Won!");
+	}
+
+	public void removeEntities(float delta) {
+		ArrayList<Entity> entitiesToRemove = new ArrayList<>();
+		for (Entity entity : entities) {
+			entity.update(delta, 9.81f);
+
+			// Überprüft, ob Health der Entität 0 ist und fügt sie zu den zu entfernenden Entitäten hinzu
+			if (entity.getHealth() == 0 && entity.getHealth() < entity.getMaxHealth()) {
+				entitiesToRemove.add(entity);
+			}
+		}
+		entities.removeAll(entitiesToRemove);
+	}
+
+	public boolean checkIfLevelCleared() {
+		for(Entity entity : entities)
+			if (entity.getAggression()=="evil")
+				return false;
+		return true;
 	}
 	public abstract void dispose ();
 	
@@ -22,7 +77,7 @@ public abstract class GameMap {
 	
 	public abstract TileType getTileTypeByCoordinate(int layer, int col, int row);
 	
-	public boolean doesEntityCollideWithMap(float x, float y, int width, int height) {
+	public boolean doesRectCollideWithMap(float x, float y, int width, int height) {
 		if (x < 0 || y < 0 || x + width > getPixelWidth() || y + height > getPixelHeight()) 
 			return true;
 		
@@ -35,6 +90,7 @@ public abstract class GameMap {
 				}
 			}
 		}
+		
 		return false;
 	}
 	
@@ -48,5 +104,21 @@ public abstract class GameMap {
 	public int getPixelHeight() {
 		return this.getHeight() * TileType.TILE_SIZE;
 	}
+	 protected void loadEntitiesFromJson(String jsonFilePath) {
+	        Json json = new Json();
+	        ArrayList<EntityData> entityDataList = json.fromJson(ArrayList.class, EntityData.class, Gdx.files.internal(jsonFilePath));
 
+	        for (EntityData entityData : entityDataList) {
+	            entities.add(createEntityFromData(entityData));
+	        }
+	    }
+
+	    private Entity createEntityFromData(EntityData entityData) {
+	        if ("Player".equals(entityData.type)) {
+	            return new Player(entityData.x, entityData.y, this, entityData.health, entityData.attackDamage, entityData.speed, entityData.jumpVelocity);
+	        } else if ("Slime".equals(entityData.type)) {
+	            return new Slime(entityData.x, entityData.y, this, entityData.health, entityData.attackDamage, entityData.speed, entityData.jumpVelocity);
+	        }
+	        return null;
+	    }
 }

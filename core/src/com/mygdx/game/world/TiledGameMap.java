@@ -8,9 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-
-import static com.mygdx.game.management.MyGdxGame.gameManager;
-import static com.mygdx.game.management.MyGdxGame.levelManager;
+import com.mygdx.game.MyGdxGame;
 
 public class TiledGameMap extends GameMap {
 	
@@ -18,23 +16,25 @@ public class TiledGameMap extends GameMap {
 	OrthogonalTiledMapRenderer tiledMapRenderer;
 	
 	public TiledGameMap() {
-		tiledMap = new TmxMapLoader().load("Map/Level"+gameManager.getRoom()+"/MapLevel"+gameManager.getRoom()+".tmx");
+		tiledMap = new TmxMapLoader().load(MyGdxGame.getLevel()+".tmx");
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 	}
+
 	@Override
 	public void render(OrthographicCamera camera, SpriteBatch batch) {
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
+		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		super.render(camera, batch);
-		levelManager.render(camera, batch);
 		batch.end();
 	}
 
 	@Override
 	public void update(float delta) {
 		super.update(delta);
+
 	}
 
 	@Override

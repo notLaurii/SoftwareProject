@@ -11,17 +11,16 @@ import com.mygdx.game.world.GameMap;
 
 public enum EntityType {
 
-	PLAYER("player", "player", 16, 24, 40),
-	SLIME("slime", "aggressive", 12, 12, 30),
-	BOOMERANG("boomerang", "neutral", 12, 12, 0),
-	DONUTPROJECTILE("donutprojectile","neutral" , 16, 16, 0);
+	PLAYER("player", 16, 24, 40),
+	SLIME("slime", 12, 12, 30),
+	BOOMERANG("boomerang", 12, 12, 0);
 
 	private String id;
 	//private Class loaderClass;
 	private int width, height;
 	private float weight;
 
-	private EntityType(String id, String category, int width, int height, float weight) {
+	private EntityType(String id, int width, int height, float weight) {
 		this.id = id;
 		//this.loaderClass = loaderClass;
 		this.width = width;
