@@ -7,6 +7,7 @@ public class EntityData {
     private float x;
     private float y;
     private float maxHealth;
+    private float health;
     private float attackDamage;
     private float speed;
     private float jumpVelocity;
@@ -75,6 +76,14 @@ public class EntityData {
 
     public void setMaxHealth(float maxHealth) {
         this.maxHealth = maxHealth;
+    }
+
+    public float getHealth() {
+        return health;
+    }
+
+    public void setHealth(float health) {
+        this.health = health;
     }
 
     public float getY() {
