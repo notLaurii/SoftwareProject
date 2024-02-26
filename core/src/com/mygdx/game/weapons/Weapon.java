@@ -1,7 +1,5 @@
 package com.mygdx.game.weapons;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.Player;
@@ -62,5 +60,4 @@ public abstract void attack(float playerDamage);
     }
     public boolean getCanAttack() {return  canAttack;}
 
-    public abstract void render(OrthographicCamera cam, SpriteBatch batch);
 }

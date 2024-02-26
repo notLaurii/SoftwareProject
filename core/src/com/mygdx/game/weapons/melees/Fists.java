@@ -1,11 +1,10 @@
 package com.mygdx.game.weapons.melees;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.world.GameMap;
 
-public class Fists extends Melee {
+public class
+Fists extends Melee {
     private float x;
     private float y;
     private GameMap map;
@@ -14,10 +13,5 @@ public class Fists extends Melee {
 
     public Fists(GameMap map, Entity wielder) {
         super(wielder.getX(),wielder.getY(), map,0,wielder,10, 5,1);
-    }
-
-    @Override
-    public void render(OrthographicCamera cam, SpriteBatch batch) {
-
     }
 }

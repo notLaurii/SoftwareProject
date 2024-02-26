@@ -58,7 +58,13 @@ public class LevelManager{
         }
     }
 
-    public void switchSetting(int level) {
+    public void switchLevel() {
+                gameManager.setRoom(gameManager.getLevel());
+                create();
+                gameMap = new TiledGameMap();
+    }
+
+    public void switchLevel(int level) {
         gameManager.setRoom(level);
         create();
         gameMap = new TiledGameMap();
@@ -98,8 +104,5 @@ public class LevelManager{
 
     public boolean isEntitiesCreated() {
         return entitiesCreated;
-    }
-    public void setEntitiesCreated(boolean created) {
-        entitiesCreated=created;
     }
 }
