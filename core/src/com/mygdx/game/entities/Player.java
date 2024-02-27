@@ -220,5 +220,8 @@ public class Player extends Entity {
 	public void setWeaponID(String weaponID) {
 		this.weaponID = weaponID;
 	}
+	public Weapon getWeapon() {
+		return weapon;
+	}
 
 }
