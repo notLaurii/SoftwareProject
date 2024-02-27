@@ -37,14 +37,24 @@ public class LevelManager{
     }
 
     public void update(float deltaTime) {
-        for (Entity entity : entities) {
-            entity.update(deltaTime, 9.81f);
+        if (gameManager.isGameRunning()) {
+            for (Entity entity : entities) {
+                entity.update(deltaTime, 9.81f);
 
-            // Überprüfe, ob die Gesundheit null ist und füge sie zur Liste der zu entfernenden Entitäten hinzu
-            if (entity.getHealth() <= 0 && entity.getHealth() < entity.getMaxHealth()) {
-                entitiesToRemove.add(entity);
+                // Überprüfe, ob die Gesundheit null ist und füge sie zur Liste der zu entfernenden Entitäten hinzu
+                if (entity.getHealth() <= 0 && entity.getHealth() < entity.getMaxHealth()) {
+                    entitiesToRemove.add(entity);
+                }
             }
+
+            // Entferne die Entitäten aus der Liste nach der Iteration
+            entities.removeAll(entitiesToRemove);
+            entities.addAll(entitiesToAdd);
+            entitiesToRemove.removeAll(entitiesToRemove);
+            entitiesToAdd.removeAll(entitiesToAdd);
         }
+        player.getWeapon().update(deltaTime);
+    }
 
         // Entferne die Entitäten aus der Liste nach der Iteration
         entities.removeAll(entitiesToRemove);
