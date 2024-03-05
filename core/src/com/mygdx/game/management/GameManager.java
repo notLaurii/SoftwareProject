@@ -1,37 +1,35 @@
 package com.mygdx.game.management;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.entities.Player;
+
 import static com.mygdx.game.management.MyGdxGame.*;
 
 public class GameManager {
     private int level;
     private int room;
-    private boolean gameRunning = true;
 
-    public GameManager(int playerId, int level) {
-        this.level=level;
-        System.out.println(level);
+    public GameManager() {
+        this.level=gameProgress.getLevel();
     }
 
     public void update(float deltaTime) {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
-            gameRunning=!gameRunning;
-        if(levelManager.isEntitiesCreated()&&levelManager.noEnemiesLeft()) {
-            if (level == room) {
-                System.out.println(level + "; " + room);
-                setLevel(level + 1);
-            }
-            if (Math.ceil(levelManager.getPlayer().getX())>=(gameMap.getPixelWidth()-levelManager.getPlayer().getWidth()))
+        Player player = levelManager.getPlayer();
+        if(Math.ceil(player.getX())>=(gameMap.getPixelWidth()-player.getWidth()))
+            if(levelManager.isEntitiesCreated()&&levelManager.noEnemiesLeft()) {
+                if (level == room) {
+                    System.out.println(level + "; " + room);
+                    setLevel(level + 1);
+                }
                 if (level == room+1 || room == 0) {
                     FileHandle folder = Gdx.files.internal("Map/Level" + level);
-                    gameSaver.savePlayerData(levelManager.getPlayer());
-                    gameSaver.saveGameProgress(levelManager.getPlayer());
+                    gameSaver.savePlayerData(player);
+                    gameSaver.saveGameProgress(player);
                     if (folder.exists())
-                        levelManager.switchLevel();
+                        levelManager.switchSetting(gameManager.getLevel());
                     else {
                         goToMainRoom();
                         System.out.println(room + " vs. " + level);
@@ -42,7 +40,7 @@ public class GameManager {
 
     public void goToMainRoom() {
         room=0;
-        levelManager.switchLevel(room);
+        levelManager.switchSetting(room);
     }
 
     public int getLevel() {
@@ -61,12 +59,5 @@ public class GameManager {
     }
     public void setRoom(int i) {
         room=i;
-    }
-
-    public boolean isGameRunning() {
-        return gameRunning;
-    }
-
-    public void setGameRunning(boolean b) { gameRunning=b;
     }
 }

@@ -1,5 +1,7 @@
 package com.mygdx.game.weapons.rangedweapons;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.projectiles.BoomerangProjectile;
 import com.mygdx.game.world.GameMap;
@@ -20,5 +22,10 @@ public class Boomerang extends RangedWeapon{
             levelManager.entitiesToAdd.add(boomerangProjectile);
             this.startAttackCooldown(this.getMaxCooldown());
         }
+    }
+
+    @Override
+    public void render(OrthographicCamera cam, SpriteBatch batch) {
+
     }
 }

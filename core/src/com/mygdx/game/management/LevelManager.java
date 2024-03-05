@@ -37,24 +37,14 @@ public class LevelManager{
     }
 
     public void update(float deltaTime) {
-        if (gameManager.isGameRunning()) {
-            for (Entity entity : entities) {
-                entity.update(deltaTime, 9.81f);
+        for (Entity entity : entities) {
+            entity.update(deltaTime, 9.81f);
 
-                // Überprüfe, ob die Gesundheit null ist und füge sie zur Liste der zu entfernenden Entitäten hinzu
-                if (entity.getHealth() <= 0 && entity.getHealth() < entity.getMaxHealth()) {
-                    entitiesToRemove.add(entity);
-                }
+            // Überprüfe, ob die Gesundheit null ist und füge sie zur Liste der zu entfernenden Entitäten hinzu
+            if (entity.getHealth() <= 0 && entity.getHealth() < entity.getMaxHealth()) {
+                entitiesToRemove.add(entity);
             }
-
-            // Entferne die Entitäten aus der Liste nach der Iteration
-            entities.removeAll(entitiesToRemove);
-            entities.addAll(entitiesToAdd);
-            entitiesToRemove.removeAll(entitiesToRemove);
-            entitiesToAdd.removeAll(entitiesToAdd);
         }
-        player.getWeapon().update(deltaTime);
-    }
 
         // Entferne die Entitäten aus der Liste nach der Iteration
         entities.removeAll(entitiesToRemove);
@@ -68,13 +58,7 @@ public class LevelManager{
         }
     }
 
-    public void switchLevel() {
-                gameManager.setRoom(gameManager.getLevel());
-                create();
-                gameMap = new TiledGameMap();
-    }
-
-    public void switchLevel(int level) {
+    public void switchSetting(int level) {
         gameManager.setRoom(level);
         create();
         gameMap = new TiledGameMap();
@@ -98,7 +82,7 @@ public class LevelManager{
     }
     private Entity createEntityFromData(EntityData entityData) {
         if ("Player".equals(entityData.getType())) {
-            return new Player(entityData.getId(), entityData.getX(), entityData.getY(), gameMap, entityData.getMaxHealth(), entityData.getHealth(), entityData.getAttackDamage(), entityData.getSpeed(), entityData.getJumpVelocity(), entityData.getWeaponID(), entityData.getSkin());
+            return new Player(entityData.getId(), entityData.getX(), entityData.getY(), gameMap, entityData.getMaxHealth(), entityData.getAttackDamage(), entityData.getSpeed(), entityData.getJumpVelocity(), entityData.getWeaponID(), entityData.getSkin());
         } else if ("Slime".equals(entityData.getType())) {
             return new Slime(entityData.getX(), entityData.getY(), gameMap, entityData.getMaxHealth(), entityData.getAttackDamage(), entityData.getSpeed(), entityData.getJumpVelocity(), entityData.getWeaponID());
         }
@@ -114,5 +98,8 @@ public class LevelManager{
 
     public boolean isEntitiesCreated() {
         return entitiesCreated;
+    }
+    public void setEntitiesCreated(boolean created) {
+        entitiesCreated=created;
     }
 }

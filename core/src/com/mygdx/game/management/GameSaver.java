@@ -32,7 +32,6 @@ public class GameSaver {
             if (data.getId() == player.getId()) {
                 data.setSkin(player.getSkin());
                 data.setJumpVelocity(player.getJumpVelocity());
-                data.setHealth(player.getHealth());
                 data.setMaxHealth(player.getMaxHealth());
                 data.setWeaponID(player.getWeaponID());
                 data.setAttackDamage(player.getAttackDamage());
