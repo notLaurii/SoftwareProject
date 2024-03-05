@@ -1,0 +1,33 @@
+[
+
+{
+    "type": "Slime",
+    "x": 80,
+    "y": 300,
+    "maxHealth": 50,
+    "attackDamage": 5,
+    "speed": 60,
+    "jumpVelocity": 6,
+    "weaponID": "Fists"
+  },
+    {
+        "type": "Slime",
+        "x": 160,
+        "y": 300,
+        "maxHealth": 50,
+        "attackDamage": 5,
+        "speed": 60,
+        "jumpVelocity": 6,
+        "weaponID": "Fists"
+    },
+    {
+        "type": "Slime",
+        "x": 600,
+        "y": 300,
+        "maxHealth": 50,
+        "attackDamage": 5,
+        "speed": 60,
+        "jumpVelocity": 6,
+        "weaponID": "Fists"
+    }
+]

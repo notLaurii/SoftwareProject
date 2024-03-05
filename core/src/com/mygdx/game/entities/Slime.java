@@ -6,9 +6,6 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.world.GameMap;
 
 public class Slime extends Enemy {
-	
-	private static final int SPEED = 60;
-	private static final int JUMP_VELOCITY = 6;
 	private int air = 0;
 
 	private float playerDetectionRangeX=182;
@@ -19,8 +16,8 @@ public class Slime extends Enemy {
 	Texture image;
 	int health;
 	
-	public Slime(float x, float y, GameMap map, float health, float attackDamage) {
-		super(x, y, EntityType.SLIME, map, health, attackDamage);
+	public Slime(float x, float y, GameMap map, float health, float attackDamage, float speed, float jump_velocity) {
+		super(x, y, EntityType.SLIME, map, health, attackDamage, speed, jump_velocity);
 		image = new Texture("slime.png");
 	}
 	
@@ -37,25 +34,25 @@ public class Slime extends Enemy {
 			if (air==0) {
 				int number = randomNumberGenerator (0,2);
 				if (number==0) {
-					this.velocityY += JUMP_VELOCITY * getWeight();
+					this.velocityY += jumpVelocity * getWeight();
 				}
 				else if (number==1) {
-					moveX(SPEED * deltaTime);
+					moveX(speed * deltaTime);
 				}
 				else if (number==2) {
-					moveX(-SPEED * deltaTime);
+					moveX(-speed * deltaTime);
 				}
 				//System.out.println("KANN WOHL NICHT LAUFEN");
 			}
 			else {
-				this.velocityY += JUMP_VELOCITY * getWeight();
+				this.velocityY += jumpVelocity * getWeight();
 				//System.out.println("KANN WOHL NICHT SPRINGEN");
 				air = 0;
 			}
 		}
 		else {
 			if (randomNumberGenerator(0, 1) == 0 && !grounded && this.velocityY > 0)
-				this.velocityY += JUMP_VELOCITY * getWeight() * deltaTime;
+				this.velocityY += jumpVelocity * getWeight() * deltaTime;
 			if (!isPlayerInRange(GameMap.player, playerDetectionRangeX, playerDetectionRangeY)) {
 				if (air == 0) {
 					int randomNumber2 = randomNumberGenerator(1, 2);
@@ -66,9 +63,9 @@ public class Slime extends Enemy {
 					}
 				}
 				if (air == 1) {
-					moveX(SPEED * deltaTime);
+					moveX(speed * deltaTime);
 				} else if (air == 2) {
-					moveX(-SPEED * deltaTime);
+					moveX(-speed * deltaTime);
 				}
 			} else if(GameMap.player.pos.x>=this.pos.x)
 				air=1;

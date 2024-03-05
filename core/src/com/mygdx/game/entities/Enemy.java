@@ -11,9 +11,8 @@ public class Enemy extends Entity {
     private static final int HEALTH_BAR_WIDTH = 24;
     private static final int HEALTH_BAR_HEIGHT = 6;
 
-	public Enemy(float x, float y, EntityType type, GameMap map, float health, float attackDamage) {
-		super(x, y, type, map, health, attackDamage);
-		// TODO Auto-generated constructor stub
+	public Enemy(float x, float y, EntityType type, GameMap map, float health, float attackDamage, float speed, float jump_velocity) {
+		super(x, y, type, map, health, attackDamage, speed, jump_velocity, "evil");
 		healthBar=new Texture("EnemyHealthBar.png");
 	}
 

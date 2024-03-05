@@ -9,7 +9,6 @@ import com.mygdx.game.world.GameMap;
 
 public class Boomerang extends Entity {
 
-    private static final int SPEED = 250;
     private boolean thrown = false;
     private boolean visible = false; // Variable für Sichtbarkeit
     private float throwTimer = 0;
@@ -18,7 +17,7 @@ public class Boomerang extends Entity {
     private Player player;
 
     public Boomerang(float x, float y, GameMap map, Player player) {
-        super(x, y, EntityType.BOOMERANG, map, 0, 0);
+        super(x, y, EntityType.BOOMERANG, map, 0, 0, 250, 0, "playing");
         this.player = player;
         image = new Texture("boomerang.png");
     }
@@ -40,7 +39,7 @@ public class Boomerang extends Entity {
         }
 
         if (thrown) {
-            float delta = SPEED * deltaTime;
+            float delta = speed * deltaTime;
             moveX(delta);
 
             // Check for collisions or boundaries here
