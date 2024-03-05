@@ -15,42 +15,29 @@ import com.mygdx.game.weapons.Weapon;
 import com.mygdx.game.world.GameMap;
 import com.mygdx.game.world.TileType;
 
+import static com.mygdx.game.management.MyGdxGame.cam;
+
 public class Player extends Entity {
 
 	private static float speed;
 	private static float jumpVelocity;
-	private static float frameDuration = 0.2f;
 	private String skin;
 	protected Texture healthBar;
 	private static final int NUM_HEALTH_BARS = 23;
 	private static final int HEALTH_BAR_WIDTH = 24;
 	private static final int HEALTH_BAR_HEIGHT = 6;
-
-	private Texture animationTexture;
-	private int frameWidth;
-	private int frameHeight;
-	private int frameCount;
-	private int currentFrame = 0;
-	private float stateTime = 0;
 	private String weaponID;
 	private Weapon weapon;
-	private float animationTimer=0;
-	private int currentPriority=0;
-	private String currentAnimation;
 	private int id;
 
-
-	Texture image;
-
-	public Player(int id, float x, float y, GameMap map, float maxHealth, float health, float attackDamage, float speed, float jumpVelocity, String weaponID, String skin) {
+	public Player(int id, float x, float y, GameMap map, float maxHealth, float attackDamage, float speed, float jumpVelocity, String weaponID, String skin) {
 		super(x, y, EntityType.PLAYER, "player", map, maxHealth, attackDamage);
 		this.speed=speed;
 		this.jumpVelocity=jumpVelocity;
 		this.weaponID=weaponID;
 		this.weapon=assignWeapon(weaponID);
 		this.skin=skin;
-		this.health=health;
-		loadAnimationFrames("Stand", 0, 0);
+		setAnimation("Stand", 0, 0);
 		healthBar=new Texture("Entity/Player/Overlay/PlayerHealthBar.png");
 		this.id = id;
 	}
@@ -204,9 +191,6 @@ public class Player extends Entity {
 
 	public void setWeaponID(String weaponID) {
 		this.weaponID = weaponID;
-	}
-	public Weapon getWeapon() {
-		return weapon;
 	}
 
 }
