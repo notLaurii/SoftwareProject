@@ -55,43 +55,38 @@ public class Player extends Entity {
 		this.id = id;
 	}
 
-	private void loadAnimationFrames(String animation, int priority, float deltaTime) {
+	private void setAnimation(String animation, int priority, float deltaTime) {
+			int frameAmount=0;
+			float frameTime=0;
 		String data="";
-		if(!animation.equals(currentAnimation)&&(animationTimer>frameCount*frameDuration||priority>=currentPriority)) {
 		if(animation=="Walk") {
-			frameCount = 8;
-			frameDuration = 0.1f;
+			frameAmount = 8;
+			frameTime = 0.1f;
 		}
 		else if(animation=="Stand") {
-			frameCount = 1;
-			frameDuration = 0.2f;
+			frameAmount = 1;
+			frameTime = 0.2f;
 		}
 		else if(animation=="Attack") {
-			frameCount = 4;
+			frameAmount = 4;
 			data=weaponID;
-			frameDuration = 0.4f;
+			frameTime = 0.4f;
 		}
 		else if(animation=="Jump") {
-			frameCount = 4;
-			frameDuration = 0.07f;
+			frameAmount = 4;
+			frameTime = 0.07f;
 		}
-			animationTimer=0;
-			animationTexture = new Texture ("Entity/Player/" + skin + "/"+ animation+"/" + skin + animation+data+this.getDirection()+".png");
-			currentPriority=priority;
-			currentAnimation = animation;
-		}
-		frameWidth = animationTexture.getWidth() / frameCount;
-		frameHeight = animationTexture.getHeight();
-		animationTimer+=deltaTime;
+		String path=  ("Entity/Player/" + skin + "/"+ animation+"/" + skin + animation+data+this.getDirection()+".png");
+		loadAnimationFrames(animation, priority, deltaTime, frameAmount, frameTime, path);
 	}
 
 	@Override
 	public void update(float deltaTime, float gravity) {
 		super.update(deltaTime, gravity);
-		loadAnimationFrames("Stand", 1, deltaTime);
+		setAnimation("Stand", 1, deltaTime);
 		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
 			if(this.weapon.getCanAttack()) {
-				loadAnimationFrames("Attack", 2, deltaTime);
+				setAnimation("Attack", 2, deltaTime);
 			}
 			attack();
 		}
@@ -104,17 +99,17 @@ public class Player extends Entity {
 			this.setDirection("Left");
 			moveCamX(-speed * deltaTime);
 			moveX(-speed * deltaTime);
-			loadAnimationFrames("Walk",1, deltaTime);
+			setAnimation("Walk",1, deltaTime);
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.D)) {
 			this.setDirection("Right");
 			moveCamX(speed * deltaTime);
 			moveX(speed * deltaTime);
-			loadAnimationFrames("Walk",1, deltaTime);
+			setAnimation("Walk",1, deltaTime);
 		}
 		if(!grounded)
-			loadAnimationFrames("Jump", 1, deltaTime);
+			setAnimation("Jump", 1, deltaTime);
 		moveCamY(pos.y);
 		updateAnimation(deltaTime);
 	}
@@ -123,12 +118,12 @@ public class Player extends Entity {
 		if ((Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.A))) {
 			if (pos.x > MyGdxGame.getWidth() / 2 && pos.x < MyGdxGame.gameMap.getPixelWidth() - MyGdxGame.getWidth() / 2) {
 				Vector2 translation = new Vector2(getDeltaX(amount), 0f);
-				MyGdxGame.cam.translate(translation);
-				MyGdxGame.cam.update();
+				cam.translate(translation);
+				cam.update();
 			} else if (pos.x <= MyGdxGame.getWidth() / 2) {
-				MyGdxGame.cam.position.x = MyGdxGame.getWidth() / 2;
+				cam.position.x = MyGdxGame.getWidth() / 2;
 			} else {
-				MyGdxGame.cam.position.x = MyGdxGame.gameMap.getPixelWidth() - MyGdxGame.getWidth() / 2;
+				cam.position.x = MyGdxGame.gameMap.getPixelWidth() - MyGdxGame.getWidth() / 2;
 			}
 		}
 	}
@@ -145,27 +140,17 @@ public class Player extends Entity {
 	public void moveCamY(float y) {
 		int heightLevel=(int) Math.floor((pos.y+getHeight())/MyGdxGame.getHeight());
 		if(heightLevel==0)
-			MyGdxGame.cam.position.y = MyGdxGame.getHeight()/2;
+			cam.position.y = MyGdxGame.getHeight()/2;
 		else if(heightLevel*MyGdxGame.getHeight()+MyGdxGame.getHeight()/2>MyGdxGame.gameMap.getPixelHeight()-MyGdxGame.getHeight()/2+TileType.TILE_SIZE)
-			MyGdxGame.cam.position.y = MyGdxGame.gameMap.getPixelHeight()-MyGdxGame.getHeight()/2;
+			cam.position.y = MyGdxGame.gameMap.getPixelHeight()-MyGdxGame.getHeight()/2;
 		else
-			MyGdxGame.cam.position.y = heightLevel*MyGdxGame.getHeight()+MyGdxGame.getHeight()/2-TileType.TILE_SIZE;
-		MyGdxGame.cam.update();
-	}
-
-	public float getY(float y) {
-		if (y>MyGdxGame.gameMap.getPixelHeight()/2)
-			return MyGdxGame.gameMap.getPixelHeight()/2;
-		return -MyGdxGame.gameMap.getPixelHeight()/2;
-	}
-
-	private void updateAnimation(float deltaTime) {
-		stateTime += deltaTime;
-		currentFrame = (int) (stateTime / frameDuration) % frameCount;
+			cam.position.y = heightLevel*MyGdxGame.getHeight()+MyGdxGame.getHeight()/2-TileType.TILE_SIZE;
+		cam.update();
 	}
 
 	@Override
 	public void render(SpriteBatch batch) {
+		weapon.render(cam, batch);
 		// CharacterAnimation rendern
 		float frameX = currentFrame * frameWidth;
 		float frameY = 0; // Der Y-Wert im Bild bleibt 0, da es sich um eine einzelne Zeile handelt
