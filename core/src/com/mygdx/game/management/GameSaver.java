@@ -49,8 +49,8 @@ public class GameSaver {
             if (data.getPlayerId() == player.getId()) {
                 data.setLevel(level);
                 //data.setAbilitiesUnlocked();
-                //data.setWeaponsUnlocked();
-                //data.setSkinsUnlocked();
+                data.setUnlockedWeapons(gameManager.getUnlockedWeapons());
+                data.setUnlockedSkins(gameManager.getUnlockedSkins());
                 data.setLevel(gameManager.getLevel());
                 break;
             }

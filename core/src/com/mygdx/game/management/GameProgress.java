@@ -2,14 +2,15 @@ package com.mygdx.game.management;
 
 import com.mygdx.game.weapons.Weapon;
 
+import java.util.ArrayList;
 import java.util.List;
 //Speichert Attribute der Spielstände
 public class GameProgress {
     private int playerId;
     private int level;
-    private List<String> abilitiesUnlocked;
-    private List<String> weaponsUnlocked;
-    private List<String> skinsUnlocked;
+    private ArrayList<String> unlockedAbilities;
+    private ArrayList<String> unlockedWeapons;
+    private ArrayList<String> unlockedSkins;
 
     public int getPlayerId() {
         return playerId;
@@ -27,28 +28,26 @@ public class GameProgress {
         this.level = level;
     }
 
-    public List<String> getAbilitiesUnlocked() {
-        return abilitiesUnlocked;
+    public ArrayList<String> getUnlockedAbilities() {
+        return unlockedAbilities;
     }
 
-    public void setAbilitiesUnlocked(List<String> skin) {
-        this.abilitiesUnlocked = abilitiesUnlocked;
+    public void setUnlockedAbilities(ArrayList<String> unlockedAbilities) {
+        this.unlockedAbilities = unlockedAbilities;
     }
 
-    public List<String> getWeaponsUnlocked() {
-        return weaponsUnlocked;
+    public ArrayList<String> getUnlockedWeapons() {
+        return unlockedWeapons;
     }
 
-    public void setWeaponsUnlocked(List<String> weaponsUnlocked) {
-        this.weaponsUnlocked = weaponsUnlocked;
+    public void setUnlockedWeapons(ArrayList<String> unlockedWeapons) {this.unlockedWeapons = unlockedWeapons;}
+
+    public ArrayList<String> getUnlockedSkins() {
+        return unlockedSkins;
     }
 
-    public List<String> getSkinsUnlocked() {
-        return skinsUnlocked;
-    }
-
-    public void setSkinsUnlocked(List<String> skinsUnlocked) {
-        this.skinsUnlocked = skinsUnlocked;
+    public void setUnlockedSkins(ArrayList<String> unlockedSkins) {
+        this.unlockedSkins = unlockedSkins;
     }
 
 }

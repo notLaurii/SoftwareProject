@@ -152,6 +152,10 @@ public class Player extends Entity {
 		batch.draw(healthBar, pos.x+getWidth()/2-HEALTH_BAR_WIDTH/2, (float) (pos.y + 1.1*getHeight()), HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT,
 				0, HEALTH_BAR_HEIGHT * textureY, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT, false, false);
 	}
+	public void switchWeapon(String weaponId) {
+		setWeaponID(weaponId);
+		this.weapon=assignWeapon(weaponID);
+	}
 
 	public int getId() {
 		return id;
@@ -191,6 +195,10 @@ public class Player extends Entity {
 
 	public void setWeaponID(String weaponID) {
 		this.weaponID = weaponID;
+	}
+
+	public Weapon getWeapon() {
+		return weapon;
 	}
 
 }
