@@ -2,8 +2,8 @@
   {
     "playerId": 1,
     "level": 1,
-    "abilitiesUnlocked": [],
-    "weaponsUnlocked": ["Fists"],
-    "skinsUnlocked": ["Susanna"]
+    "unlockedAbilities": ["test"],
+    "unlockedWeapons": ["boomerang", "donut"],
+    "unlockedSkins": ["PridePanda", "Susanna"]
   }
 ]
