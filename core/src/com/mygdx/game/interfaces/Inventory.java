@@ -51,13 +51,11 @@ public class Inventory extends Interface {
     @Override
     public void onButtonClicked(int buttonIndex) {
         if(buttonIndex==0) {
-            System.out.println("Count: "+gameProgress.getUnlockedWeapons());
-            menu = new ItemMenu(gameManager.getUnlockedWeapons(), gameManager.getUnlockedWeapons(), "Weapons");
+            menu = new ItemMenu(gameManager.getAllWeapons(), gameManager.getUnlockedWeapons(), "Weapons");
             menuOpen=true;
         }
         if(buttonIndex==1) {
-            System.out.println("Count: "+gameProgress.getUnlockedSkins());
-            menu = new ItemMenu(gameManager.getUnlockedSkins(), gameManager.getUnlockedSkins(), "Skins");
+            menu = new ItemMenu(gameManager.getAllSkins(), gameManager.getUnlockedSkins(), "Skins");
             menuOpen=true;
         }
     }

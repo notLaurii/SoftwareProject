@@ -3,6 +3,9 @@ package com.mygdx.game.interfaces;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.mygdx.game.entities.Entity;
+import com.mygdx.game.entities.Player;
+import com.mygdx.game.entities.projectiles.Projectile;
 import com.mygdx.game.weapons.Weapon;
 
 import java.util.ArrayList;
@@ -37,14 +40,22 @@ public class ItemMenu extends Interface{
         float backgroundWidth=this.background.getWidth();
         float backgroundHeight=this.background.getHeight();
         if(Objects.equals(type, "Weapons")) {
-            System.out.println(items);
-            for (Object weaponId : items) {
+            for (Object weaponId : unlockedItems) {
                 addButton(this.background.getX() + backgroundWidth / 42+i*backgroundWidth/42*13, this.background.getY() + backgroundHeight - backgroundHeight * 13 / 56+y*backgroundHeight/56 * 13, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, "Entity/Weapons/" + weaponId + ".png");
                 if(i==2) {
                     i = 0;
                     y++;
                 }
                 else i++;
+            }
+            for (Object weaponId : items) {
+                if (!unlockedItems.contains(weaponId)) {
+                    addButton(this.background.getX() + backgroundWidth / 42 + i * backgroundWidth / 42 * 13, this.background.getY() + backgroundHeight - backgroundHeight * 13 / 56 + y * backgroundHeight / 56 * 13, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, "Entity/Weapons/" + weaponId + "Locked.png");
+                    if (i == 2) {
+                        i = 0;
+                        y++;
+                    } else i++;
+                }
             }
         }
         else if(Objects.equals(type, "Skins")) {
@@ -66,15 +77,25 @@ public class ItemMenu extends Interface{
     }
 
     public void onButtonClicked(int buttonIndex) {
+        Player player =levelManager.getPlayer();
         if(Objects.equals(type, "Weapons")) {
-            levelManager.getPlayer().switchWeapon(items.get(buttonIndex));
-            System.out.println(buttonIndex + " " + items.get(buttonIndex));
-            gameManager.updateInventory();
+            if(unlockedItems.size()>buttonIndex) {
+                player.switchWeapon(unlockedItems.get(buttonIndex));
+                gameManager.updateInventory();
+                for(Entity entity : levelManager.entities)
+                    if(entity instanceof Projectile) {
+                        if(((Projectile) entity).getShooter()== player)
+                            levelManager.entitiesToRemove.add(entity);
+                    }
+            }
         }
         else if(Objects.equals(type, "Skins")) {
-            levelManager.getPlayer().setSkin(items.get(buttonIndex));
-            System.out.println(buttonIndex + " " + items.get(buttonIndex));
-            gameManager.updateInventory();
+            if(unlockedItems.contains(items.get(buttonIndex))) {
+                player.setSkin(items.get(buttonIndex));
+                System.out.println(buttonIndex + " " + items.get(buttonIndex));
+                gameManager.updateInventory();
+                player.update(0, 9.81f);
+            }
         }
     }
 }

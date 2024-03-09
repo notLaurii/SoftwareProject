@@ -74,7 +74,7 @@ public abstract class Entity {
 	
 	public abstract void render (SpriteBatch batch);
 	
-	protected void moveX (float amount) {
+	public void moveX (float amount) {
 		float newX = pos.x + amount;
 		if (!map.doesEntityCollideWithMap(newX, pos.y, getWidth(), getHeight()))
 			this.pos.x = newX;
