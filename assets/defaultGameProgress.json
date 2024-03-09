@@ -2,8 +2,11 @@
   {
     "playerId": 1,
     "level": 1,
+    "allAbilities": ["test"],
+    "allWeapons": ["boomerang", "donut"],
+    "allSkins": ["PridePanda", "Susanna"],
     "unlockedAbilities": ["test"],
-    "unlockedWeapons": ["boomerang", "donut"],
+    "unlockedWeapons": ["donut"],
     "unlockedSkins": ["PridePanda", "Susanna"]
   }
 ]
