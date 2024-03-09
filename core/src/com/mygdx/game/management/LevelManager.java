@@ -37,20 +37,23 @@ public class LevelManager{
     }
 
     public void update(float deltaTime) {
-        for (Entity entity : entities) {
-            entity.update(deltaTime, 9.81f);
+        if (gameManager.isGameRunning()) {
+            for (Entity entity : entities) {
+                entity.update(deltaTime, 9.81f);
 
-            // Überprüfe, ob die Gesundheit null ist und füge sie zur Liste der zu entfernenden Entitäten hinzu
-            if (entity.getHealth() <= 0 && entity.getHealth() < entity.getMaxHealth()) {
-                entitiesToRemove.add(entity);
+                // Überprüfe, ob die Gesundheit null ist und füge sie zur Liste der zu entfernenden Entitäten hinzu
+                if (entity.getHealth() <= 0 && entity.getHealth() < entity.getMaxHealth()) {
+                    entitiesToRemove.add(entity);
+                }
             }
-        }
 
-        // Entferne die Entitäten aus der Liste nach der Iteration
-        entities.removeAll(entitiesToRemove);
-        entities.addAll(entitiesToAdd);
-        entitiesToRemove.removeAll(entitiesToRemove);
-        entitiesToAdd.removeAll(entitiesToAdd);
+            // Entferne die Entitäten aus der Liste nach der Iteration
+            entities.removeAll(entitiesToRemove);
+            entities.addAll(entitiesToAdd);
+            entitiesToRemove.removeAll(entitiesToRemove);
+            entitiesToAdd.removeAll(entitiesToAdd);
+            player.getWeapon().update(deltaTime);
+        }
     }
     public void render(OrthographicCamera camera, SpriteBatch batch) {
         for(Entity entity : entities) {
@@ -58,7 +61,13 @@ public class LevelManager{
         }
     }
 
-    public void switchSetting(int level) {
+    public void switchLevel() {
+        gameManager.setRoom(gameManager.getLevel());
+        create();
+        gameMap = new TiledGameMap();
+    }
+
+    public void switchLevel(int level) {
         gameManager.setRoom(level);
         create();
         gameMap = new TiledGameMap();

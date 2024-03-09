@@ -13,7 +13,7 @@ public class Donut extends RangedWeapon{
     private Texture image;
     public Donut(float x, float y, GameMap map, Entity wielder) {
         super(x, y, 25, map, wielder, 1.5f);
-        this.image=new Texture("Entity/Weapons/Catalysts/donut.png");
+        this.image=new Texture("Entity/Weapons/donut.png");
     }
 
 

@@ -4,49 +4,62 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.management.MyGdxGame;
 
-import static com.mygdx.game.management.MyGdxGame.gameProgress;
-import static com.mygdx.game.management.MyGdxGame.levelManager;
+import static com.mygdx.game.management.MyGdxGame.*;
+import static sun.tools.jconsole.inspector.XDataViewer.dispose;
 
-public class Inventory extends Game {
+public class Inventory extends Interface {
 
-    private Stage inventoryStage;
-    private Texture myTexture;
-    private TextureRegion myTextureRegion;
-    private TextureRegionDrawable myTexRegionDrawable;
-    private ImageButton weaponButton;
-
+    private boolean menuOpen=false;
+    private ItemMenu menu;
     @Override
     public void create()
     {
-        myTexture = new Texture(Gdx.files.internal("Entity/Projectile/boomerang.png"));
-        myTextureRegion = new TextureRegion(myTexture);
-        myTexRegionDrawable = new TextureRegionDrawable(myTextureRegion);
-        weaponButton = new ImageButton(myTexRegionDrawable); //Set the button up
-        weaponButton.setPosition(levelManager.getPlayer().getX(), levelManager.getPlayer().getY());
-        weaponButton.setSize(10,10);
-        inventoryStage = new Stage(new ScreenViewport()); //Set up a stage for the ui
-        inventoryStage.addActor(weaponButton); //Add the button to the stage to perform rendering and take input.
-        Gdx.input.setInputProcessor(inventoryStage); //Start taking input from the ui
+        this.backgroundImage = new Texture(Gdx.files.internal("Interfaces/inventory.png"));
+        this.background = new Image(backgroundImage);
+        this.background.setSize((16f/19)*(2f/3)* Gdx.graphics.getHeight(), (2f/3)*Gdx.graphics.getHeight());
+        this.background.setPosition((Gdx.graphics.getWidth()-background.getWidth())/2, (Gdx.graphics.getHeight()-background.getHeight())/2);
+        super.create();
+        addWeaponButton(); //Add weaponButton to the stage to perform rendering and take input.
+        addSkinButton();
     }
 
     @Override
-    public void render()
-    {
-        //Gdx.gl.glClearColor(0.5f,0.2f,0.3f,0.5f);
-        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        inventoryStage.act(Gdx.graphics.getDeltaTime()); //Perform ui logic
-        inventoryStage.draw(); //Draw the ui
-    }
-
-    public void update(float deltaTime) {
-        if(weaponButton.isPressed()) {
-            new ItemMenu(gameProgress.getWeaponsUnlocked(), gameProgress.getWeaponsUnlocked());
+    public void render() {
+        super.render();
+        if(menuOpen) {
+            menu.render();
         }
     }
+
+    public void addWeaponButton() {
+        addButton(this.background.getX()+this.background.getWidth()/64*8f, this.background.getY()+this.background.getHeight()/76*42f,this.background.getWidth()*10/64, this.background.getHeight()*10/76, this.background.getWidth()*8/64, this.background.getHeight()*8/76, "Entity/Weapons/"+levelManager.getPlayer().getWeaponID()+".png");
+    }
+
+    public void addSkinButton() {
+        addButton(this.background.getX()+this.background.getWidth()/64*24, this.background.getY()+this.background.getHeight()/76*34, this.background.getWidth()*20/64, this.background.getHeight()*29/76, this.background.getWidth()*16/64, this.background.getHeight()*24/76,"Entity/Player/"+levelManager.getPlayer().getSkin()+"/Stand/"+levelManager.getPlayer().getSkin()+"StandFront.png");
+    }
+
+    @Override
+    public void onButtonClicked(int buttonIndex) {
+        if(buttonIndex==0) {
+            menu = new ItemMenu(gameManager.getAllWeapons(), gameManager.getUnlockedWeapons(), "Weapons");
+            menuOpen=true;
+        }
+        if(buttonIndex==1) {
+            menu = new ItemMenu(gameManager.getAllSkins(), gameManager.getUnlockedSkins(), "Skins");
+            menuOpen=true;
+        }
+    }
+    public void setMenuOpen(boolean open) {menuOpen=open;}
+    public boolean getMenuOpen() {return menuOpen;}
+
 }

@@ -74,7 +74,7 @@ public abstract class Entity {
 	
 	public abstract void render (SpriteBatch batch);
 	
-	protected void moveX (float amount) {
+	public void moveX (float amount) {
 		float newX = pos.x + amount;
 		if (!map.doesEntityCollideWithMap(newX, pos.y, getWidth(), getHeight()))
 			this.pos.x = newX;
@@ -156,12 +156,12 @@ public abstract class Entity {
 			player.takeDamage(attackDamage);
 	}
 	public Weapon assignWeapon(String weaponID) {
-		if ("Fists".equals(weaponID))
+		if ("fists".equals(weaponID))
 			return new Fists(map, this);
-		else if ("Boomerang".equals(weaponID)) {
+		else if ("boomerang".equals(weaponID)) {
 			return new Boomerang(this.getX(), this.getY() + this.getHeight() / 2, map, this);
 		}
-		else if ("Donut".equals(weaponID)) {
+		else if ("donut".equals(weaponID)) {
 			return new Donut(this.getX(), this.getY() + this.getHeight() / 2, map, this);
 		}
 		return null;

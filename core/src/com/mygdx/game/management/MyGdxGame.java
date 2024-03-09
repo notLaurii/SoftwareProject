@@ -6,8 +6,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Json;
 import com.mygdx.game.world.GameMap;
 import com.mygdx.game.world.TiledGameMap;
+
+import java.util.ArrayList;
+
 //Erstellt das Spiel
 public class MyGdxGame extends ApplicationAdapter {
 	
@@ -31,7 +35,12 @@ public class MyGdxGame extends ApplicationAdapter {
 		Width = Gdx.graphics.getWidth();
 		Height = Gdx.graphics.getHeight();
 		gameProgress = new GameProgress();
-		gameManager = new GameManager();
+		try {
+			loadGameFromJson("gameProgress.json", false);
+		} catch (Exception e){
+			loadGameFromJson("defaultGameProgress.json", false);
+		}
+		//gameManager = new GameManager();
 		gameMap = new TiledGameMap();
 		gameSaver = new GameSaver(gameProgress.getLevel(), gameManager);
 		levelManager= new LevelManager();
@@ -47,7 +56,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		cam.update();
-		gameMap.update(Gdx.graphics.getDeltaTime());
+		//gameMap.update(Gdx.graphics.getDeltaTime());
 		gameManager.update(Gdx.graphics.getDeltaTime());
 		levelManager.update(Gdx.graphics.getDeltaTime());
 		gameSaver.update(Gdx.graphics.getDeltaTime());
@@ -66,5 +75,18 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
+	}
+
+	protected void loadGameFromJson(String jsonFilePath, boolean internal) {
+		Json json = new Json();
+		ArrayList<GameProgress> gameDataList = json.fromJson(ArrayList.class, GameProgress.class, Gdx.files.local(jsonFilePath));
+		if (internal)
+			gameDataList = json.fromJson(ArrayList.class, GameProgress.class, Gdx.files.internal(jsonFilePath));
+		for (GameProgress gameData : gameDataList) {
+			createGameFromData(gameData);
+		}
+	}
+	private void createGameFromData(GameProgress gameData) {
+		gameManager = new GameManager(gameData.getPlayerId(), gameData.getLevel(), gameData.getAllAbilities(), gameData.getAllWeapons(), gameData.getAllSkins(), gameData.getUnlockedAbilities(), gameData.getUnlockedWeapons(), gameData.getUnlockedSkins());
 	}
 }

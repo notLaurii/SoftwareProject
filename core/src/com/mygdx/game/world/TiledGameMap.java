@@ -40,7 +40,6 @@ public class TiledGameMap extends GameMap {
 	@Override
 	public void dispose() {
 		tiledMap.dispose();
-
 	}
 
 	@Override

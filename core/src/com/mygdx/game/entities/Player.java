@@ -19,10 +19,10 @@ import static com.mygdx.game.management.MyGdxGame.cam;
 
 public class Player extends Entity {
 
-	private static float speed;
-	private static float jumpVelocity;
+	private float speed;
+	private float jumpVelocity;
 	private String skin;
-	protected Texture healthBar;
+	private Texture healthBar;
 	private static final int NUM_HEALTH_BARS = 23;
 	private static final int HEALTH_BAR_WIDTH = 24;
 	private static final int HEALTH_BAR_HEIGHT = 6;
@@ -42,7 +42,7 @@ public class Player extends Entity {
 		this.id = id;
 	}
 
-	private void setAnimation(String animation, int priority, float deltaTime) {
+	public void setAnimation(String animation, int priority, float deltaTime) {
 			int frameAmount=0;
 			float frameTime=0;
 		String data="";
@@ -152,6 +152,10 @@ public class Player extends Entity {
 		batch.draw(healthBar, pos.x+getWidth()/2-HEALTH_BAR_WIDTH/2, (float) (pos.y + 1.1*getHeight()), HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT,
 				0, HEALTH_BAR_HEIGHT * textureY, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT, false, false);
 	}
+	public void switchWeapon(String weaponId) {
+		setWeaponID(weaponId);
+		this.weapon=assignWeapon(weaponID);
+	}
 
 	public int getId() {
 		return id;
@@ -161,20 +165,20 @@ public class Player extends Entity {
 		this.weapon.attack(this.attackDamage);
 	}
 
-	public static float getSpeed() {
+	public float getSpeed() {
 		return speed;
 	}
 
-	public static void setSpeed(float speed) {
-		Player.speed = speed;
+	public void setSpeed(float speed) {
+		this.speed = speed;
 	}
 
-	public static float getJumpVelocity() {
+	public float getJumpVelocity() {
 		return jumpVelocity;
 	}
 
-	public static void setJumpVelocity(float jumpVelocity) {
-		Player.jumpVelocity = jumpVelocity;
+	public void setJumpVelocity(float jumpVelocity) {
+		this.jumpVelocity = jumpVelocity;
 	}
 
 	public String getSkin() {
@@ -191,6 +195,10 @@ public class Player extends Entity {
 
 	public void setWeaponID(String weaponID) {
 		this.weaponID = weaponID;
+	}
+
+	public Weapon getWeapon() {
+		return weapon;
 	}
 
 }
