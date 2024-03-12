@@ -32,12 +32,13 @@ public class Player extends Entity {
 	private int GoldCounter = 10;
 	private boolean tnt = false;
 
-	public Player(int id, float x, float y, GameMap map, float maxHealth, float attackDamage, float speed, float jumpVelocity, String weaponID, String skin) {
+	public Player(int id, float x, float y, GameMap map, float maxHealth, float health, float attackDamage, float speed, float jumpVelocity, String weaponID, String skin) {
 		super(x, y, EntityType.PLAYER, "player", map, maxHealth, attackDamage);
 		this.speed=speed;
 		this.jumpVelocity=jumpVelocity;
 		this.weaponID=weaponID;
 		this.weapon=assignWeapon(weaponID);
+		this.health=health;
 		this.skin=skin;
 		setAnimation("Stand", 0, 0);
 		healthBar=new Texture("Entity/Player/Overlay/PlayerHealthBar.png");
