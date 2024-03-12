@@ -7,7 +7,11 @@ import com.badlogic.gdx.utils.Json;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.EntityData;
 import com.mygdx.game.entities.Player;
+import com.mygdx.game.entities.Tnt;
+import com.mygdx.game.entities.enemies.Elf;
+import com.mygdx.game.entities.enemies.Enemy;
 import com.mygdx.game.entities.enemies.Slime;
+import com.mygdx.game.entities.items.Gold;
 import com.mygdx.game.entities.projectiles.BoomerangProjectile;
 import com.mygdx.game.world.TiledGameMap;
 
@@ -44,6 +48,19 @@ public class LevelManager{
                 // Überprüfe, ob die Gesundheit null ist und füge sie zur Liste der zu entfernenden Entitäten hinzu
                 if (entity.getHealth() <= 0 && entity.getHealth() < entity.getMaxHealth()) {
                     entitiesToRemove.add(entity);
+                    if(entity instanceof Enemy) {
+                        for(int i = 0; i<((Enemy) entity).getGoldDrop();i++) {
+                            if(((Enemy) entity).getGoldDrop()<=1) {
+                                entitiesToAdd.add(new Gold(entity.getX(), entity.getY() + 20, gameMap));
+                            } else entitiesToAdd.add(new Gold(entity.getX() + randomNumberGenerator(-17,17), entity.getY() + 20, gameMap));
+                        }
+                    }
+                }
+                if(entity.isEntityInRange(player,5,5)) {
+                    if (entity instanceof Gold) {
+                        entitiesToRemove.add(entity);
+                        player.changeGold(+1);
+                    }
                 }
             }
 
@@ -97,8 +114,18 @@ public class LevelManager{
         }
         else if ("Boomerang".equals(entityData.getType())) {
             return new BoomerangProjectile(gameMap, player, 5);
+        } else if ("Elf".equals(entityData.getType())) {
+            return new Elf(entityData.getX(), entityData.getY(), gameMap, entityData.getMaxHealth(), entityData.getAttackDamage(), entityData.getSpeed(), entityData.getJumpVelocity(), entityData.getWeaponID());
+        }
+        else if ("Tnt".equals(entityData.getType())) {
+            return new Tnt(entityData.getX(), entityData.getY(), gameMap);
         }
         return null;
+    }
+    public int randomNumberGenerator (int low, int high) {
+        double doubleRandomNumber = Math.random()*high;
+        int randomNumber = (int)doubleRandomNumber+low;
+        return randomNumber;
     }
 
     public Player getPlayer() {

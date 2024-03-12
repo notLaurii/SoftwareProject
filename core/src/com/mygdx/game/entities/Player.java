@@ -15,7 +15,7 @@ import com.mygdx.game.weapons.Weapon;
 import com.mygdx.game.world.GameMap;
 import com.mygdx.game.world.TileType;
 
-import static com.mygdx.game.management.MyGdxGame.cam;
+import static com.mygdx.game.management.MyGdxGame.*;
 
 public class Player extends Entity {
 
@@ -29,6 +29,8 @@ public class Player extends Entity {
 	private String weaponID;
 	private Weapon weapon;
 	private int id;
+	private int GoldCounter = 10;
+	private boolean tnt = false;
 
 	public Player(int id, float x, float y, GameMap map, float maxHealth, float attackDamage, float speed, float jumpVelocity, String weaponID, String skin) {
 		super(x, y, EntityType.PLAYER, "player", map, maxHealth, attackDamage);
@@ -99,6 +101,14 @@ public class Player extends Entity {
 			setAnimation("Jump", 1, deltaTime);
 		moveCamY(pos.y);
 		updateAnimation(deltaTime);
+		if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
+			if(!tnt) {
+				if(isGrounded()) {
+					levelManager.entitiesToAdd.add(new Tnt(getX(),getY(),gameMap));
+					tnt = true;
+				}
+			} else tnt = false;
+		}
 	}
 
 	public void moveCamX(float amount) {
@@ -160,7 +170,10 @@ public class Player extends Entity {
 	public int getId() {
 		return id;
 	}
-
+	public void changeGold(int amount) {GoldCounter=GoldCounter+amount;}
+	public int getGoldAmount() {
+		return GoldCounter;
+	}
 	public void attack() {
 		this.weapon.attack(this.attackDamage);
 	}

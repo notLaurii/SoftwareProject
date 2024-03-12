@@ -13,8 +13,11 @@ public enum EntityType {
 
 	PLAYER("player", "player", 16, 24, 40),
 	SLIME("slime", "aggressive", 12, 12, 30),
+	ELF("elf","aggressive",16,14,40),
 	BOOMERANG("boomerang", "neutral", 12, 12, 0),
-	DONUTPROJECTILE("donutprojectile","neutral" , 16, 16, 0);
+	TNT("tnt","physicalAbility",16,16,20),
+	DONUTPROJECTILE("donutprojectile","neutral" , 16, 16, 0),
+	GOLD("gold", "neutral", 8,8,20);
 
 	private String id;
 	//private Class loaderClass;
