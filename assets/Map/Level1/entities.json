@@ -29,5 +29,15 @@
         "speed": 60,
         "jumpVelocity": 6,
         "weaponID": "Fists"
+    },
+    {
+        "type": "Elf",
+        "x": 500,
+        "y": 300,
+        "maxHealth": 200,
+        "attackDamage": 1,
+        "speed": 60,
+        "jumpVelocity": 6,
+        "weaponID": "Fists"
     }
 ]
