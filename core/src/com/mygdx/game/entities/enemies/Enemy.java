@@ -14,7 +14,7 @@ public class Enemy extends Entity {
     private static final int HEALTH_BAR_HEIGHT = 6;
 	private int goldDrop;
 	public Enemy(float x, float y, EntityType type, GameMap map, float health, float attackDamage, int goldDrop) {
-		super(x, y, type, "enemy", map, health, attackDamage);
+		super(x, y, type, map, health, attackDamage);
 		healthBar=new Texture("Entity/Enemy/Overlay/EnemyHealthBar.png");
 		this.goldDrop = goldDrop;
 	}

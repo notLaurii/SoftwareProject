@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Json;
-import com.mygdx.game.entities.Entity;
-import com.mygdx.game.entities.EntityData;
-import com.mygdx.game.entities.Player;
-import com.mygdx.game.entities.Tnt;
+import com.mygdx.game.entities.*;
 import com.mygdx.game.entities.enemies.Elf;
 import com.mygdx.game.entities.enemies.Enemy;
 import com.mygdx.game.entities.enemies.Slime;
@@ -20,7 +17,7 @@ import java.util.ArrayList;
 import static com.mygdx.game.management.MyGdxGame.*;
 
 public class LevelManager{
-    public ArrayList<Entity> entities;
+    private ArrayList<Entity> entities;
     public ArrayList<Entity> entitiesToRemove = new ArrayList<>();
     public ArrayList<Entity> entitiesToAdd = new ArrayList<>();
     private Player player;
@@ -35,12 +32,14 @@ public class LevelManager{
         } catch (Exception e){
             loadEntitiesFromJson("defaultPlayerData.json", true);
         }
-        player=(Player) entities.get(0);
+        player=(Player) entities.getFirst();
         loadEntitiesFromJson("Map/Level"+ gameManager.getRoom()+"/entities.json", true);
         entitiesCreated=true;
+        System.out.println(entities);
     }
 
     public void update(float deltaTime) {
+        System.out.println(entities);
         if (gameManager.isGameRunning()) {
             for (Entity entity : entities) {
                 entity.update(deltaTime, 9.81f);
@@ -92,7 +91,7 @@ public class LevelManager{
 
     public boolean noEnemiesLeft() {
         for(Entity entity : entities)
-            if (entity.getCategory().equals("enemy"))
+            if (entity instanceof Enemy)
                 return false;
         return true;
     }
@@ -120,6 +119,9 @@ public class LevelManager{
         else if ("Tnt".equals(entityData.getType())) {
             return new Tnt(entityData.getX(), entityData.getY(), gameMap);
         }
+        else if ("Shop".equals(entityData.getType())) {
+            return new ShopOwner(entityData.getX(), entityData.getY(), gameMap);
+        }
         return null;
     }
     public int randomNumberGenerator (int low, int high) {
@@ -137,5 +139,8 @@ public class LevelManager{
     }
     public void setEntitiesCreated(boolean created) {
         entitiesCreated=created;
+    }
+    public ArrayList<Entity> getEntities() {
+        return entities;
     }
 }

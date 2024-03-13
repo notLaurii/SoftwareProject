@@ -6,6 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.entities.Player;
+import com.mygdx.game.interfaces.Interface;
 import com.mygdx.game.interfaces.Inventory;
 import com.mygdx.game.weapons.Weapon;
 
@@ -21,39 +22,39 @@ public class GameManager {
     private ArrayList<String> allAbilities;
     private ArrayList<String> allWeapons;
     private ArrayList<String> allSkins;
+    private ArrayList<String> purchasableAbilities;
+    private ArrayList<String> purchasableWeapons;
+    private ArrayList<String> purchasableSkins;
     private ArrayList<String> unlockedAbilities;
     private ArrayList<String> unlockedWeapons;
     private ArrayList<String> unlockedSkins;
+    private ArrayList<Interface> openInterfaces=new ArrayList<>();
+    private InputManager inputManager;
 
-    public GameManager(int playerId, int level, ArrayList<String> allAbilities, ArrayList<String> allWeapons, ArrayList<String> allSkins, ArrayList<String> unlockedAbilities, ArrayList<String> unlockedWeapons, ArrayList<String> unlockedSkins) {
+    public GameManager(int playerId, int level, ArrayList<String> allAbilities, ArrayList<String> allWeapons, ArrayList<String> allSkins, ArrayList<String> purchasableAbilities, ArrayList<String> purchasableWeapons, ArrayList<String> purchasableSkins,ArrayList<String> unlockedAbilities, ArrayList<String> unlockedWeapons, ArrayList<String> unlockedSkins) {
         this.level=level;
         this.allAbilities=allAbilities;
         this.allWeapons=allWeapons;
         this.allSkins=allSkins;
+        this.purchasableAbilities=purchasableAbilities;
+        this.purchasableWeapons=purchasableWeapons;
+        this.purchasableSkins=purchasableSkins;
         this.unlockedAbilities=unlockedAbilities;
         this.unlockedWeapons=unlockedWeapons;
         this.unlockedSkins=unlockedSkins;
+        this.inputManager=new InputManager();
     }
 
     public void update(float deltaTime) {
         Player player = levelManager.getPlayer();
-        if(Gdx.input.isKeyJustPressed(Input.Keys.I)||Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            if (inventory != null) {
-                gameRunning = true;
-                inventory = null;
-            } else if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-                if (gameRunning) {
-                    inventory = new Inventory();
-                    inventory.create();
-                    gameRunning = false;
-                }
-            }
+        if(!openInterfaces.contains(inventory)) {
+            inventory = null;
         }
-
+        if(openInterfaces.isEmpty())
+            gameRunning = true;
         if(Math.ceil(player.getX()+player.getSpeed() * deltaTime)>=(gameMap.getPixelWidth()-player.getWidth()))
             if(levelManager.isEntitiesCreated()&&levelManager.noEnemiesLeft()) {
                 if (level == room) {
-                    System.out.println(level + "; " + room);
                     setLevel(level + 1);
                 }
                 if (level == room+1 || room == 0) {
@@ -67,6 +68,7 @@ public class GameManager {
                     }
                 }
             }
+        inputManager.update(deltaTime);
     }
 
     public void goToMainRoom() {
@@ -83,8 +85,8 @@ public class GameManager {
 
     public void render(OrthographicCamera cam, SpriteBatch batch) {
         gameMap.render(cam, batch);
-        if(!gameRunning) {
-            inventory.render();
+        for(Interface openInterface : openInterfaces) {
+            openInterface.render();
         }
     }
 
@@ -105,24 +107,34 @@ public class GameManager {
         return allAbilities;
     }
 
-    public void setAllAbilities(ArrayList<String> allAbilities) {
-        this.allAbilities = allAbilities;
-    }
-
     public ArrayList<String> getAllWeapons() {
         return allWeapons;
-    }
-
-    public void setAllWeapons(ArrayList<String> allWeapons) {
-        this.allWeapons = allWeapons;
     }
 
     public ArrayList<String> getAllSkins() {
         return allSkins;
     }
+    public ArrayList<String> getPurchasableAbilities() {
+        return purchasableAbilities;
+    }
 
-    public void setAllSkins(ArrayList<String> allSkins) {
-        this.allSkins = allSkins;
+    public void setPurchasableAbilities(ArrayList<String> purchasableAbilities) {
+        this.purchasableAbilities = purchasableAbilities;
+    }
+    public ArrayList<String> getPurchasableWeapons() {
+        return purchasableWeapons;
+    }
+
+    public void setPurchasableWeapons(ArrayList<String> purchasableWeapons) {
+        this.purchasableWeapons = purchasableWeapons;
+    }
+
+    public ArrayList<String> getPurchasableSkins() {
+        return purchasableSkins;
+    }
+
+    public void setPurchasableSkins(ArrayList<String> purchasableSkins) {
+        this.purchasableSkins = purchasableSkins;
     }
 
     public ArrayList<String> getUnlockedAbilities() {
@@ -147,12 +159,27 @@ public class GameManager {
     public void setUnlockedSkins(ArrayList<String> unlockedSkins) {
         this.unlockedSkins = unlockedSkins;
     }
+    public ArrayList<Interface> getOpenInterfaces() {
+        return openInterfaces;
+    }
+
+    public void setOpenInterfaces(ArrayList<Interface> openInterfaces) {
+        this.openInterfaces = openInterfaces;
+    }
 
     public Inventory getInventory() {
         return inventory;
     }
     public void updateInventory() {
+        openInterfaces.remove(inventory);
         inventory=new Inventory();
         inventory.create();
+    }
+
+    public void setInventory(Inventory inventory) { this.inventory=inventory;
+    }
+
+    public boolean getGameRunning() {
+        return gameRunning;
     }
 }

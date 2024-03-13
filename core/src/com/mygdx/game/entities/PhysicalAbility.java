@@ -5,8 +5,8 @@ import com.mygdx.game.world.GameMap;
 
 public class PhysicalAbility extends Entity {
 
-    public PhysicalAbility(float x, float y, EntityType type, String category, GameMap map, float maxHealth, float attackDamage) {
-        super(x, y, type, "physicalAbility", map, 0, attackDamage);
+    public PhysicalAbility(float x, float y, EntityType type, GameMap map, float maxHealth, float attackDamage) {
+        super(x, y, type, map, 0, attackDamage);
     }
 
     @Override

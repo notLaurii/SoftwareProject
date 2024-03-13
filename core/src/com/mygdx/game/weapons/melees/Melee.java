@@ -19,7 +19,7 @@ public abstract class Melee extends Weapon {
     }
 
     public void attack(float damage) {
-        ArrayList<Entity> entities = levelManager.entities;
+        ArrayList<Entity> entities = levelManager.getEntities();
         for(Entity entity : entities)
             if(entity != wielder && wielder.isEntityInRange(entity, rangeX, rangeY))
                 entity.takeDamage(damage);

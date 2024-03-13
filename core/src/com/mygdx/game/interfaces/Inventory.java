@@ -1,24 +1,15 @@
 package com.mygdx.game.interfaces;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mygdx.game.management.MyGdxGame;
 
-import static com.mygdx.game.management.MyGdxGame.*;
-import static sun.tools.jconsole.inspector.XDataViewer.dispose;
+import static com.mygdx.game.management.MyGdxGame.gameManager;
+import static com.mygdx.game.management.MyGdxGame.levelManager;
 
 public class Inventory extends Interface {
 
-    private boolean menuOpen=false;
+
     private ItemMenu menu;
     @Override
     public void create()
@@ -32,14 +23,6 @@ public class Inventory extends Interface {
         addSkinButton();
     }
 
-    @Override
-    public void render() {
-        super.render();
-        if(menuOpen) {
-            menu.render();
-        }
-    }
-
     public void addWeaponButton() {
         addButton(this.background.getX()+this.background.getWidth()/64*8f, this.background.getY()+this.background.getHeight()/76*42f,this.background.getWidth()*10/64, this.background.getHeight()*10/76, this.background.getWidth()*8/64, this.background.getHeight()*8/76, "Entity/Weapons/"+levelManager.getPlayer().getWeaponID()+".png");
     }
@@ -50,16 +33,19 @@ public class Inventory extends Interface {
 
     @Override
     public void onButtonClicked(int buttonIndex) {
-        if(buttonIndex==0) {
-            menu = new ItemMenu(gameManager.getAllWeapons(), gameManager.getUnlockedWeapons(), "Weapons");
-            menuOpen=true;
-        }
-        if(buttonIndex==1) {
-            menu = new ItemMenu(gameManager.getAllSkins(), gameManager.getUnlockedSkins(), "Skins");
-            menuOpen=true;
+        if (gameManager.getOpenInterfaces().contains(this)) {
+            if (buttonIndex == 0) {
+                menu = new ItemMenu(gameManager.getAllWeapons(), gameManager.getUnlockedWeapons(), "Weapons");
+            } else if (buttonIndex == 1) {
+                menu = new ItemMenu(gameManager.getAllSkins(), gameManager.getUnlockedSkins(), "Skins");
+            }
         }
     }
-    public void setMenuOpen(boolean open) {menuOpen=open;}
-    public boolean getMenuOpen() {return menuOpen;}
+    public ItemMenu getMenu() {
+        return menu;
+    }
 
+    public void setMenu(ItemMenu menu) {
+        this.menu = menu;
+    }
 }

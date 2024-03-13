@@ -6,8 +6,6 @@ import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.EntityType;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.world.GameMap;
-import com.sun.jmx.remote.util.EnvHelp;
-import jdk.internal.org.jline.terminal.TerminalBuilder;
 
 
 public abstract class Item extends Entity {
@@ -17,8 +15,8 @@ public abstract class Item extends Entity {
     protected GameMap map;
     protected boolean grounded = false;
 
-    public Item(float x, float y, EntityType type, String neutral, GameMap map, int i, int i1) {
-        super(x,y,type,"neutral", map, 0,0);
+    public Item(float x, float y, EntityType type, GameMap map, int i, int i1) {
+        super(x,y,type, map, 0,0);
         this.pos = new Vector2(x,y);
         this.type = type;
         this.map = map;

@@ -5,15 +5,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.entities.Entity;
+import com.mygdx.game.entities.projectiles.Projectile;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import static com.mygdx.game.management.MyGdxGame.gameManager;
+import static com.mygdx.game.management.MyGdxGame.levelManager;
 
 public class Interface {
 
@@ -29,15 +32,17 @@ public class Interface {
 
     public void create()
     {
+        gameManager.getOpenInterfaces().add(this);
         this.stage = new Stage(new ScreenViewport()); //Set up a stage for the ui
         this.stage.addActor(background);
         Gdx.input.setInputProcessor(stage); //Start taking input from the ui
     }
 
+
     public void render()
     {
-        stage.act(Gdx.graphics.getDeltaTime()); //Perform ui logic
-        stage.draw(); //Draw the ui
+            stage.act(Gdx.graphics.getDeltaTime()); //Perform ui logic
+            stage.draw(); //Draw the ui
     }
 
     public void addButton(float x, float y, float width, float height, float textureWidth, float textureHeight, String path) {
@@ -58,5 +63,13 @@ public class Interface {
     }
     public void onButtonClicked(int buttonIndex) {
 
+    }
+
+    public void removePlayerProjectiles() {
+        for(Entity entity : levelManager.getEntities())
+            if(entity instanceof Projectile) {
+                if(((Projectile) entity).getShooter()== levelManager.getPlayer())
+                    levelManager.entitiesToRemove.add(entity);
+            }
     }
 }

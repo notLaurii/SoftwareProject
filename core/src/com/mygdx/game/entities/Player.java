@@ -33,7 +33,7 @@ public class Player extends Entity {
 	private boolean tnt = false;
 
 	public Player(int id, float x, float y, GameMap map, float maxHealth, float health, float attackDamage, float speed, float jumpVelocity, String weaponID, String skin) {
-		super(x, y, EntityType.PLAYER, "player", map, maxHealth, attackDamage);
+		super(x, y, EntityType.PLAYER, map, maxHealth, attackDamage);
 		this.speed=speed;
 		this.jumpVelocity=jumpVelocity;
 		this.weaponID=weaponID;
@@ -72,14 +72,9 @@ public class Player extends Entity {
 
 	@Override
 	public void update(float deltaTime, float gravity) {
+		System.out.println("test");
 		super.update(deltaTime, gravity);
 		setAnimation("Stand", 1, deltaTime);
-		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-			if(this.weapon.getCanAttack()) {
-				setAnimation("Attack", 2, deltaTime);
-			}
-			attack();
-		}
 		if (Gdx.input.isKeyPressed(Keys.SPACE) && grounded)
 			this.velocityY += jumpVelocity * getWeight();
 		else if (Gdx.input.isKeyPressed(Keys.SPACE) && !grounded &&this.velocityY > 0)
@@ -148,6 +143,7 @@ public class Player extends Entity {
 
 	@Override
 	public void render(SpriteBatch batch) {
+		System.out.println("Hallo!");
 		weapon.render(cam, batch);
 		// CharacterAnimation rendern
 		float frameX = currentFrame * frameWidth;
@@ -166,6 +162,13 @@ public class Player extends Entity {
 	public void switchWeapon(String weaponId) {
 		setWeaponID(weaponId);
 		this.weapon=assignWeapon(weaponID);
+	}
+
+	public void actOnLeftClick(float deltaTime) {
+		if (this.weapon.getCanAttack()) {
+			setAnimation("Attack", 2, deltaTime);
+		}
+		attack();
 	}
 
 	public int getId() {

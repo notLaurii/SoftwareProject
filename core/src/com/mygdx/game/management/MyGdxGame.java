@@ -87,6 +87,6 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 	}
 	private void createGameFromData(GameProgress gameData) {
-		gameManager = new GameManager(gameData.getPlayerId(), gameData.getLevel(), gameData.getAllAbilities(), gameData.getAllWeapons(), gameData.getAllSkins(), gameData.getUnlockedAbilities(), gameData.getUnlockedWeapons(), gameData.getUnlockedSkins());
+		gameManager = new GameManager(gameData.getPlayerId(), gameData.getLevel(), gameData.getAllAbilities(), gameData.getAllWeapons(), gameData.getAllSkins(), gameData.getPurchasableAbilities(), gameData.getPurchasableWeapons(), gameData.getPurchasableSkins(),gameData.getUnlockedAbilities(), gameData.getUnlockedWeapons(), gameData.getUnlockedSkins());
 	}
 }

@@ -11,6 +11,9 @@ public class GameProgress {
     private ArrayList<String> allAbilities;
     private ArrayList<String> allWeapons;
     private ArrayList<String> allSkins;
+    private ArrayList<String> purchasableAbilities;
+    private ArrayList<String> purchasableWeapons;
+    private ArrayList<String> purchasableSkins;
     private ArrayList<String> unlockedAbilities;
     private ArrayList<String> unlockedWeapons;
     private ArrayList<String> unlockedSkins;
@@ -52,6 +55,28 @@ public class GameProgress {
 
     public void setAllSkins(ArrayList<String> allSkins) {
         this.allSkins = allSkins;
+    }
+    public ArrayList<String> getPurchasableAbilities() {
+        return purchasableAbilities;
+    }
+
+    public void setPurchasableAbilities(ArrayList<String> purchasableAbilities) {
+        this.purchasableAbilities = purchasableAbilities;
+    }
+    public ArrayList<String> getPurchasableWeapons() {
+        return purchasableWeapons;
+    }
+
+    public void setPurchasableWeapons(ArrayList<String> purchasableWeapons) {
+        this.purchasableWeapons = purchasableWeapons;
+    }
+
+    public ArrayList<String> getPurchasableSkins() {
+        return purchasableSkins;
+    }
+
+    public void setPurchasableSkins(ArrayList<String> purchasableSkins) {
+        this.purchasableSkins = purchasableSkins;
     }
 
     public ArrayList<String> getUnlockedAbilities() {
