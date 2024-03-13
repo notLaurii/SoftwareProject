@@ -58,7 +58,6 @@ public class MyGdxGame extends ApplicationAdapter {
 		cam.update();
 		//gameMap.update(Gdx.graphics.getDeltaTime());
 		gameManager.update(Gdx.graphics.getDeltaTime());
-		System.out.println(Gdx.graphics.getDeltaTime());
 		levelManager.update(Gdx.graphics.getDeltaTime());
 		gameSaver.update(Gdx.graphics.getDeltaTime());
 		gameManager.render(cam, batch);

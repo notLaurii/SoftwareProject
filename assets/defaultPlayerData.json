@@ -5,10 +5,11 @@
     "x": 300,
     "y": 300,
     "maxHealth": 100,
+    "health": 100,
     "attackDamage": 10,
     "speed": 80,
     "jumpVelocity": 5,
-    "weaponID": "donut",
+    "weaponID": "boomerang",
     "skin": "Susanna"
   }
 ]

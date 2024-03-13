@@ -27,7 +27,7 @@ public class Slime extends Enemy {
 	int health;
 	
 	public Slime(float x, float y, GameMap map, float health, float attackDamage, float speed, float jumpVelocity, String WeaponID) {
-		super(x, y, EntityType.SLIME, map, health, attackDamage);
+		super(x, y, EntityType.SLIME, map, health, attackDamage,5);
 		image = new Texture("Entity/Enemy/Slime/slime.png");
 		this.speed=speed;
 		this.jumpVelocity=jumpVelocity;
