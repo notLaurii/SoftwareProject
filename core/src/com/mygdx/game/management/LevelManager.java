@@ -32,7 +32,7 @@ public class LevelManager{
         } catch (Exception e){
             loadEntitiesFromJson("defaultPlayerData.json", true);
         }
-        player=(Player) entities.getFirst();
+        player=(Player) entities.get(0);
         loadEntitiesFromJson("Map/Level"+ gameManager.getRoom()+"/entities.json", true);
         entitiesCreated=true;
         System.out.println(entities);
