@@ -19,9 +19,9 @@ public class InputManager {
         Inventory inventory = gameManager.getInventory();
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if(!openInterfaces.isEmpty()) {
-                if(inventory==openInterfaces.getLast())
+                if(inventory==openInterfaces.get(openInterfaces.size()-1))
                     inventory=null;
-                openInterfaces.remove(openInterfaces.getLast());
+                openInterfaces.remove(openInterfaces.get(openInterfaces.size()-1));
             }
         }
         else if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
