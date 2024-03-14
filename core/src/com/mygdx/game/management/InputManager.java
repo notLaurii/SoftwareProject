@@ -23,6 +23,10 @@ public class InputManager {
                     inventory=null;
                 openInterfaces.remove(openInterfaces.get(openInterfaces.size()-1));
             }
+                        if(inventory!=null) {
+                gameManager.updateInventory();
+                inventory=gameManager.getInventory();
+            }
         }
         else if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
             if (inventory != null) {
