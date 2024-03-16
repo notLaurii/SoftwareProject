@@ -12,8 +12,8 @@ import static com.mygdx.game.management.MyGdxGame.levelManager;
 public abstract class Melee extends Weapon {
     protected float rangeX;
     protected float rangeY;
-    public Melee(float x, float y, GameMap map, float weaponDamage, Entity wielder, float rangeX, float rangeY, float maxCooldown) {
-        super(x, y, weaponDamage, map, wielder, maxCooldown);
+    public Melee(float x, float y, GameMap map, float weaponDamage, Entity wielder, float rangeX, float rangeY, float maxCooldown, int price) {
+        super(x, y, weaponDamage, map, wielder, maxCooldown, price);
         this.rangeX=rangeX;
         this.rangeY=rangeY;
     }

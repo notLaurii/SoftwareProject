@@ -2,11 +2,13 @@ package com.mygdx.game.interfaces;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -45,7 +47,8 @@ public class Interface {
             stage.draw(); //Draw the ui
     }
 
-    public void addButton(float x, float y, float width, float height, float textureWidth, float textureHeight, String path) {
+    public void addImageButton(float x, float y, float width, float height, float textureWidth, float textureHeight, String path) {
+        Interface thisInterface = this;
         buttonTexture = new Texture(Gdx.files.internal(path));
         buttonTextureRegion = new TextureRegion(buttonTexture);
         buttonTexRegionDrawable = new TextureRegionDrawable(buttonTextureRegion);
@@ -57,12 +60,13 @@ public class Interface {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                onButtonClicked(buttons.indexOf(button));
+                if (gameManager.getOpenInterfaces().contains(thisInterface)) {
+                    onButtonClicked(buttons.indexOf(button));
+                }
             }
         });
     }
     public void onButtonClicked(int buttonIndex) {
-
     }
 
     public void removePlayerProjectiles() {

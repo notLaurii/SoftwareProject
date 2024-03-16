@@ -23,8 +23,9 @@ public abstract class Weapon {
     private float cooldownTimer;
     private boolean cooldownStopped;
     private Timer.Task cooldownTask;
+    protected int price;
 
-    public Weapon(float x, float y, float weaponDamage, GameMap map, Entity wielder, float maxCooldown) {
+    public Weapon(float x, float y, float weaponDamage, GameMap map, Entity wielder, float maxCooldown, int price) {
         this.x=x;
         this.y=y;
         this.map=map;
@@ -32,6 +33,7 @@ public abstract class Weapon {
         this.weaponDamage=weaponDamage;
         this.attackDamage=weaponDamage+wielder.getAttackDamage();
         this.maxCooldown=maxCooldown;
+        this.price=price;
     }
     public abstract void attack(float playerDamage);
 
@@ -85,5 +87,5 @@ public abstract class Weapon {
         return maxCooldown;
     }
     public boolean getCanAttack() {return  canAttack;}
-
+    public int getPrice() {return price;}
 }

@@ -14,7 +14,7 @@ import static com.mygdx.game.management.MyGdxGame.levelManager;
 public class Boomerang extends RangedWeapon{
 
     public Boomerang(float x, float y, GameMap map, Entity wielder) {
-        super(x, y, 15, map, wielder, 1);
+        super(x, y, 15, map, wielder, 1, 30);
     }
     public void attack(float playerDamage) {
         if(this.getCanAttack()) {

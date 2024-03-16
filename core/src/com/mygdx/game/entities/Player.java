@@ -29,10 +29,10 @@ public class Player extends Entity {
 	private String weaponID;
 	private Weapon weapon;
 	private int id;
-	private int GoldCounter = 10;
+	private int goldAmount;
 	private boolean tnt = false;
 
-	public Player(int id, float x, float y, GameMap map, float maxHealth, float health, float attackDamage, float speed, float jumpVelocity, String weaponID, String skin) {
+	public Player(int id, float x, float y, GameMap map, float maxHealth, float health, float attackDamage, float speed, float jumpVelocity, String weaponID, String skin, int goldAmount) {
 		super(x, y, EntityType.PLAYER, map, maxHealth, attackDamage);
 		this.speed=speed;
 		this.jumpVelocity=jumpVelocity;
@@ -43,6 +43,7 @@ public class Player extends Entity {
 		setAnimation("Stand", 0, 0);
 		healthBar=new Texture("Entity/Player/Overlay/PlayerHealthBar.png");
 		this.id = id;
+		this.goldAmount=goldAmount;
 	}
 
 	public void setAnimation(String animation, int priority, float deltaTime) {
@@ -72,7 +73,6 @@ public class Player extends Entity {
 
 	@Override
 	public void update(float deltaTime, float gravity) {
-		System.out.println("test");
 		super.update(deltaTime, gravity);
 		setAnimation("Stand", 1, deltaTime);
 		if (Gdx.input.isKeyPressed(Keys.SPACE) && grounded)
@@ -82,14 +82,12 @@ public class Player extends Entity {
 
 		if (Gdx.input.isKeyPressed(Keys.A)) {
 			this.setDirection("Left");
-			moveCamX(-speed * deltaTime);
 			moveX(-speed * deltaTime);
 			setAnimation("Walk",1, deltaTime);
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.D)) {
 			this.setDirection("Right");
-			moveCamX(speed * deltaTime);
 			moveX(speed * deltaTime);
 			setAnimation("Walk",1, deltaTime);
 		}
@@ -105,20 +103,17 @@ public class Player extends Entity {
 				}
 			} else tnt = false;
 		}
+		moveCamX();
 	}
 
-	public void moveCamX(float amount) {
-		if ((Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.A))) {
+	public void moveCamX() {
 			if (pos.x > MyGdxGame.getWidth() / 2 && pos.x < MyGdxGame.gameMap.getPixelWidth() - MyGdxGame.getWidth() / 2) {
-				Vector2 translation = new Vector2(getDeltaX(amount), 0f);
-				cam.translate(translation);
-				cam.update();
+				cam.position.x = pos.x;
 			} else if (pos.x <= MyGdxGame.getWidth() / 2) {
 				cam.position.x = MyGdxGame.getWidth() / 2;
 			} else {
 				cam.position.x = MyGdxGame.gameMap.getPixelWidth() - MyGdxGame.getWidth() / 2;
 			}
-		}
 	}
 
 	public float getDeltaX(float amount) {
@@ -140,25 +135,23 @@ public class Player extends Entity {
 			cam.position.y = heightLevel*MyGdxGame.getHeight()+MyGdxGame.getHeight()/2-TileType.TILE_SIZE;
 		cam.update();
 	}
-
-	@Override
 	public void render(SpriteBatch batch) {
-		System.out.println("Hallo!");
 		weapon.render(cam, batch);
 		// CharacterAnimation rendern
 		float frameX = currentFrame * frameWidth;
 		float frameY = 0; // Der Y-Wert im Bild bleibt 0, da es sich um eine einzelne Zeile handelt
 
 		// HealthBar rendern
-		float healthRatio = health / maxHealth;
+		float healthRatio = Math.abs(health / maxHealth);
 		int numBarsToShow = (int) (healthRatio * NUM_HEALTH_BARS);
 		int textureY = NUM_HEALTH_BARS - numBarsToShow;
 
 		// Zeichnen der Bilder
-		batch.draw(animationTexture, pos.x, pos.y, 0, 0, getWidth(), getHeight(), 1, 1, 0, (int)frameX, (int)frameY, frameWidth, frameHeight, false, false);
-		batch.draw(healthBar, pos.x+getWidth()/2-HEALTH_BAR_WIDTH/2, (float) (pos.y + 1.1*getHeight()), HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT,
+		batch.draw(animationTexture, pos.x, pos.y, 0, 0, getWidth(), getHeight(), 1, 1, 0, (int) frameX, (int) frameY, frameWidth, frameHeight, false, false);
+		batch.draw(healthBar, pos.x + getWidth() / 2f - HEALTH_BAR_WIDTH / 2f, (float) (pos.y + 1.1 * getHeight()), HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT,
 				0, HEALTH_BAR_HEIGHT * textureY, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT, false, false);
 	}
+
 	public void switchWeapon(String weaponId) {
 		setWeaponID(weaponId);
 		this.weapon=assignWeapon(weaponID);
@@ -174,9 +167,9 @@ public class Player extends Entity {
 	public int getId() {
 		return id;
 	}
-	public void changeGold(int amount) {GoldCounter=GoldCounter+amount;}
+	public void changeGoldAmount(int amount) {this.goldAmount+=amount;}
 	public int getGoldAmount() {
-		return GoldCounter;
+		return goldAmount;
 	}
 	public void attack() {
 		this.weapon.attack(this.attackDamage);

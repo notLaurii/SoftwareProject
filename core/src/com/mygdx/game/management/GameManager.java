@@ -6,8 +6,10 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.entities.Player;
+import com.mygdx.game.interfaces.GameEndScreen;
 import com.mygdx.game.interfaces.Interface;
 import com.mygdx.game.interfaces.Inventory;
+import com.mygdx.game.interfaces.LevelEndScreen;
 import com.mygdx.game.weapons.Weapon;
 
 import java.util.ArrayList;
@@ -46,26 +48,30 @@ public class GameManager {
     }
 
     public void update(float deltaTime) {
+        System.out.println(openInterfaces);
         Player player = levelManager.getPlayer();
         if(!openInterfaces.contains(inventory)) {
             inventory = null;
         }
         if(openInterfaces.isEmpty())
             gameRunning = true;
-        if(Math.ceil(player.getX()+player.getSpeed() * deltaTime)>=(gameMap.getPixelWidth()-player.getWidth()))
+        if(gameRunning&&Math.ceil(player.getX()+player.getSpeed() * deltaTime)>=(gameMap.getPixelWidth()-player.getWidth()))
             if(levelManager.isEntitiesCreated()&&levelManager.noEnemiesLeft()) {
                 if (level == room) {
                     setLevel(level + 1);
                 }
                 if (level == room+1 || room == 0) {
+                    if(level==2) {
+                        purchasableWeapons.add("donut");
+                    }
                     FileHandle folder = Gdx.files.internal("Map/Level" + level);
                     gameSaver.savePlayerData(player);
                     gameSaver.saveGameProgress(player);
                     if (folder.exists())
-                        levelManager.switchLevel();
-                    else {
-                        goToMainRoom();
-                    }
+                        new LevelEndScreen();
+                    else
+                        new GameEndScreen();
+                    setGameRunning(false);
                 }
             }
         inputManager.update(deltaTime);
@@ -73,7 +79,7 @@ public class GameManager {
 
     public void goToMainRoom() {
         room=0;
-        levelManager.switchLevel(room);
+        levelManager.switchRoom(room);
     }
 
     public int getLevel() {

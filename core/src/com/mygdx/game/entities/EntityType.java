@@ -19,7 +19,7 @@ public enum EntityType {
 	BOOMERANG("boomerang", 12, 12, 0),
 	DONUTPROJECTILE("donutprojectile", 16, 16, 0),
 	TNT("tnt",16,16,20),
-	GOLD("gold",  8,8,20);
+	GOLD("gold",  8,8,30);
 
 	private String id;
 	//private Class loaderClass;

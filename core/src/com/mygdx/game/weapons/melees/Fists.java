@@ -13,7 +13,7 @@ public class Fists extends Melee {
     private float cooldown=1;
 
     public Fists(GameMap map, Entity wielder) {
-        super(wielder.getX(),wielder.getY(), map,0,wielder,10, 5,1);
+        super(wielder.getX(),wielder.getY(), map,0,wielder,10, 5,1, 0);
     }
 
     @Override

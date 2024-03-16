@@ -24,21 +24,19 @@ public class Inventory extends Interface {
     }
 
     public void addWeaponButton() {
-        addButton(this.background.getX()+this.background.getWidth()/64*8f, this.background.getY()+this.background.getHeight()/76*42f,this.background.getWidth()*10/64, this.background.getHeight()*10/76, this.background.getWidth()*8/64, this.background.getHeight()*8/76, "Entity/Weapons/"+levelManager.getPlayer().getWeaponID()+".png");
+        addImageButton(this.background.getX()+this.background.getWidth()/64*8f, this.background.getY()+this.background.getHeight()/76*42f,this.background.getWidth()*10/64, this.background.getHeight()*10/76, this.background.getWidth()*8/64, this.background.getHeight()*8/76, "Entity/Weapons/"+levelManager.getPlayer().getWeaponID()+".png");
     }
 
     public void addSkinButton() {
-        addButton(this.background.getX()+this.background.getWidth()/64*24, this.background.getY()+this.background.getHeight()/76*34, this.background.getWidth()*20/64, this.background.getHeight()*29/76, this.background.getWidth()*16/64, this.background.getHeight()*24/76,"Entity/Player/"+levelManager.getPlayer().getSkin()+"/Stand/"+levelManager.getPlayer().getSkin()+"StandFront.png");
+        addImageButton(this.background.getX()+this.background.getWidth()/64*24, this.background.getY()+this.background.getHeight()/76*34, this.background.getWidth()*20/64, this.background.getHeight()*29/76, this.background.getWidth()*16/64, this.background.getHeight()*24/76,"Entity/Player/"+levelManager.getPlayer().getSkin()+"/Stand/"+levelManager.getPlayer().getSkin()+"StandFront.png");
     }
 
     @Override
     public void onButtonClicked(int buttonIndex) {
-        if (gameManager.getOpenInterfaces().contains(this)) {
             if (buttonIndex == 0) {
                 menu = new ItemMenu(gameManager.getAllWeapons(), gameManager.getUnlockedWeapons(), "Weapons");
             } else if (buttonIndex == 1) {
                 menu = new ItemMenu(gameManager.getAllSkins(), gameManager.getUnlockedSkins(), "Skins");
-            }
         }
     }
     public ItemMenu getMenu() {

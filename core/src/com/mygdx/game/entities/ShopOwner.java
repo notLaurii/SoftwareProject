@@ -11,7 +11,6 @@ public class ShopOwner extends Interactable {
 
 
     private ShopMenu shopMenu;
-    private boolean menuOpen;
     Texture image;
 
     public ShopOwner(float x, float y, GameMap map) {
