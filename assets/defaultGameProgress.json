@@ -6,7 +6,7 @@
     "allWeapons": ["boomerang", "donut"],
     "allSkins": ["PridePanda", "Susanna"],
     "purchasableAbilities": [],
-    "purchasableWeapons": ["boomerang"],
+    "purchasableWeapons": [],
     "purchasableSkins": ["PridePanda"],
     "unlockedAbilities": ["test"],
     "unlockedWeapons": ["boomerang"],
