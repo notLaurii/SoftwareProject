@@ -35,7 +35,7 @@
         "x": 500,
         "y": 300,
         "maxHealth": 200,
-        "attackDamage": 1,
+        "attackDamage": 25,
         "speed": 60,
         "jumpVelocity": 6,
         "weaponID": "Fists"

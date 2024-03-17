@@ -10,7 +10,8 @@
     "speed": 80,
     "jumpVelocity": 5,
     "weaponID": "boomerang",
-    "skin": "Susanna"
+    "skin": "Susanna",
+    "goldAmount": 0
   }
 ]
 
