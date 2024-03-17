@@ -37,7 +37,7 @@
         "maxHealth": 200,
         "attackDamage": 25,
         "speed": 60,
-        "jumpVelocity": 6,
+        "jumpVelocity": 4,
         "weaponID": "Fists"
     }
 ]

@@ -1,0 +1,89 @@
+[
+
+{
+    "type": "Slime",
+    "x": 80,
+    "y": 300,
+    "maxHealth": 50,
+    "attackDamage": 5,
+    "speed": 60,
+    "jumpVelocity": 6,
+    "weaponID": "Fists"
+  },
+    {
+        "type": "Slime",
+        "x": 160,
+        "y": 300,
+        "maxHealth": 50,
+        "attackDamage": 5,
+        "speed": 60,
+        "jumpVelocity": 6,
+        "weaponID": "Fists"
+    },
+    {
+        "type": "Slime",
+        "x": 600,
+        "y": 300,
+        "maxHealth": 50,
+        "attackDamage": 5,
+        "speed": 60,
+        "jumpVelocity": 6,
+        "weaponID": "Fists"
+    },
+{
+        "type": "Slime",
+        "x": 600,
+        "y": 300,
+        "maxHealth": 50,
+        "attackDamage": 5,
+        "speed": 60,
+        "jumpVelocity": 6,
+        "weaponID": "Fists"
+    },
+
+{
+        "type": "Slime",
+        "x": 600,
+        "y": 300,
+        "maxHealth": 50,
+        "attackDamage": 5,
+        "speed": 60,
+        "jumpVelocity": 6,
+        "weaponID": "Fists"
+    },
+
+{
+        "type": "Slime",
+        "x": 600,
+        "y": 300,
+        "maxHealth": 50,
+        "attackDamage": 5,
+        "speed": 60,
+        "jumpVelocity": 6,
+        "weaponID": "Fists"
+    },
+
+    {
+        "type": "Elf",
+        "x": 500,
+        "y": 300,
+        "maxHealth": 200,
+        "attackDamage": 10,
+        "jumpVelocity": 6
+    },
+    {
+        "type": "Magican",
+        "x": 500,
+        "y": 300,
+        "maxHealth": 200,
+        "jumpVelocity": 5
+    },
+    {
+        "type": "Bird",
+        "x": 500,
+        "y": 300,
+        "maxHealth": 30
+    }
+
+
+]
