@@ -47,39 +47,35 @@ public class GameManager {
         this.inputManager=new InputManager();
     }
 
-    public void update(float deltaTime) {
-        System.out.println(openInterfaces);
+    public void update(float deltaTime) {//kümmert sich um die offenen Interfaces und hält das Spiel an, falls eines offen ist. Managed das erreichte Level und speichert das Spiel beim Weitergehen ins nächste Level.
         Player player = levelManager.getPlayer();
         if(!openInterfaces.contains(inventory)) {
             inventory = null;
         }
         if(openInterfaces.isEmpty())
             gameRunning = true;
-        if(gameRunning&&Math.ceil(player.getX()+player.getSpeed() * deltaTime)>=(gameMap.getPixelWidth()-player.getWidth()))
-            if(levelManager.isEntitiesCreated()&&levelManager.noEnemiesLeft()) {
-                if (level == room) {
-                    setLevel(level + 1);
-                }
-                if (level == room+1 || room == 0) {
-                    if(level==2) {
-                        purchasableWeapons.add("donut");
+        if(gameRunning)
+            if (Math.ceil(player.getX()+player.getSpeed() * deltaTime)>=(gameMap.getPixelWidth()-player.getWidth())) {
+                if (levelManager.isEntitiesCreated() && levelManager.noEnemiesLeft()) {
+                    if (level == room) {
+                        setLevel(level + 1);
                     }
-                    FileHandle folder = Gdx.files.internal("Map/Level" + level);
-                    gameSaver.savePlayerData(player);
-                    gameSaver.saveGameProgress(player);
-                    if (folder.exists())
-                        new LevelEndScreen();
-                    else
-                        new GameEndScreen();
-                    setGameRunning(false);
+                    if (level == room + 1 || room == 0) {
+                        if (level == 2) {
+                            purchasableWeapons.add("donut");
+                        }
+                        FileHandle folder = Gdx.files.internal("Map/Level" + level);
+                        gameSaver.savePlayerData(player);
+                        gameSaver.saveGameProgress(player);
+                        if (folder.exists())
+                            new LevelEndScreen();
+                        else
+                            new GameEndScreen();
+                        setGameRunning(false);
+                    }
                 }
             }
         inputManager.update(deltaTime);
-    }
-
-    public void goToMainRoom() {
-        room=0;
-        levelManager.switchRoom(room);
     }
 
     public int getLevel() {
@@ -89,7 +85,7 @@ public class GameManager {
         level=amount;
     }
 
-    public void render(OrthographicCamera cam, SpriteBatch batch) {
+    public void render(OrthographicCamera cam, SpriteBatch batch) {//rendert die offenen Interfaces
         gameMap.render(cam, batch);
         for(Interface openInterface : openInterfaces) {
             openInterface.render();
@@ -176,7 +172,7 @@ public class GameManager {
     public Inventory getInventory() {
         return inventory;
     }
-    public void updateInventory() {
+    public void updateInventory() {//updatet das Inventar nach einer Veränderung
         openInterfaces.remove(inventory);
         inventory=new Inventory();
         inventory.create();

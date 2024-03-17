@@ -35,9 +35,9 @@ public abstract class Weapon {
         this.maxCooldown=maxCooldown;
         this.price=price;
     }
-    public abstract void attack(float playerDamage);
+    public abstract void attack(float playerDamage);//führt die passende Angriffstaktik aus
 
-    public void startAttackCooldown(float weaponCooldown) {
+    public void startAttackCooldown(float weaponCooldown) {//startet den Cooldown für den nächsten Angriff
         canAttack = false;
         this.cooldownTimer=maxCooldown;
         cooldownTask = new Timer.Task() {
@@ -49,7 +49,7 @@ public abstract class Weapon {
         Timer.schedule(cooldownTask, weaponCooldown);
     }
 
-    public void update(float deltaTime) {
+    public void update(float deltaTime) {//"pausiert" den Cooldown, wenn das Spiel angehalten wird
         if(!canAttack)
             if(gameManager.isGameRunning()) {
                 cooldownTimer-=deltaTime;

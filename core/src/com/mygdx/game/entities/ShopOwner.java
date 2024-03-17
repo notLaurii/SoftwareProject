@@ -21,7 +21,7 @@ public class ShopOwner extends Interactable {
     }
 
     @Override
-    public void update(float deltaTime, float gravity) {
+    public void update(float deltaTime, float gravity) {//Überprüft bzw. zeigt an, ob mit Shop interagiert werden kann
         if(isEntityInRange(levelManager.getPlayer(), playerDetectionRangeX, playerDetectionRangeY)) {
             this.image= new Texture("Entity/NPC/ShopOwner/ShopOwnerInRange.png");
         }
@@ -35,7 +35,7 @@ public class ShopOwner extends Interactable {
     }
 
     @Override
-    public void interactWithPlayer() {
+    public void interactWithPlayer() {//erstellt ein ShopMenu durch Interaktion mit Spieler
         this.shopMenu=new ShopMenu(gameManager.getPurchasableWeapons(), gameManager.getUnlockedWeapons(), "Weapons", this);
     }
 
@@ -43,7 +43,7 @@ public class ShopOwner extends Interactable {
         return shopMenu;
     }
 
-    public void setMenu(ShopMenu menu) {
+    public void setMenu(ShopMenu menu) {//Entfernt das Menu (aus der Liste der geöffneten Interfaces)
         if(this.shopMenu!=null)
             gameManager.getOpenInterfaces().remove(shopMenu);
         this.shopMenu=menu;}

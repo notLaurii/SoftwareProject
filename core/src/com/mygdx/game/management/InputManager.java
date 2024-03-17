@@ -14,7 +14,7 @@ import static com.mygdx.game.management.MyGdxGame.levelManager;
 
 public class InputManager {
 
-    public void update(float deltaTime) {
+    public void update(float deltaTime) {//Führt für jede Taste die zur Situation passende Aktion aus
         if (!levelManager.isGameOver()) {
             ArrayList<Interface> openInterfaces = gameManager.getOpenInterfaces();
             Inventory inventory = gameManager.getInventory();

@@ -35,24 +35,24 @@ public class Interface {
     public void create()
     {
         gameManager.getOpenInterfaces().add(this);
-        this.stage = new Stage(new ScreenViewport()); //Set up a stage for the ui
+        this.stage = new Stage(new ScreenViewport());
         this.stage.addActor(background);
-        Gdx.input.setInputProcessor(stage); //Start taking input from the ui
+        Gdx.input.setInputProcessor(stage);
     }
 
 
     public void render()
     {
-            stage.act(Gdx.graphics.getDeltaTime()); //Perform ui logic
-            stage.draw(); //Draw the ui
+            stage.act(Gdx.graphics.getDeltaTime());
+            stage.draw();
     }
 
-    public void addImageButton(float x, float y, float width, float height, float textureWidth, float textureHeight, String path) {
+    public void addImageButton(float x, float y, float width, float height, float textureWidth, float textureHeight, String path) { //erstellt einen Button mit Bild und fügt ihn einer ArrayList hinzu, damit er immer identifiziert werden kann
         Interface thisInterface = this;
         buttonTexture = new Texture(Gdx.files.internal(path));
         buttonTextureRegion = new TextureRegion(buttonTexture);
         buttonTexRegionDrawable = new TextureRegionDrawable(buttonTextureRegion);
-        ImageButton button = new ImageButton(buttonTexRegionDrawable); //Set the button up
+        ImageButton button = new ImageButton(buttonTexRegionDrawable);
         button.setPosition(x, y);
         button.getImageCell().getActor().setScale(textureWidth/buttonTexture.getWidth(),textureHeight/buttonTexture.getHeight());
         stage.addActor(button);
@@ -66,7 +66,7 @@ public class Interface {
             }
         });
     }
-    public void onButtonClicked(int buttonIndex) {
+    public void onButtonClicked(int buttonIndex) { //beschreibt, was passiert, wenn ein Button gedrückt wird
     }
 
     public void removePlayerProjectiles() {

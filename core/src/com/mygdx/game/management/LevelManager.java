@@ -6,11 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Json;
 import com.mygdx.game.entities.*;
-import com.mygdx.game.entities.enemies.Elf;
-import com.mygdx.game.entities.enemies.Enemy;
-import com.mygdx.game.entities.enemies.Slime;
+import com.mygdx.game.entities.enemies.*;
 import com.mygdx.game.entities.items.Gold;
 import com.mygdx.game.entities.projectiles.BoomerangProjectile;
+import com.mygdx.game.entities.projectiles.PearlProjectile;
 import com.mygdx.game.interfaces.DeathScreen;
 import com.mygdx.game.world.TiledGameMap;
 
@@ -26,6 +25,7 @@ public class LevelManager{
     private boolean entitiesCreated=false;
 
     private boolean gameOver=false;
+    private boolean pearlIsOnMap = false;
     public LevelManager() {
     }
 
@@ -41,7 +41,7 @@ public class LevelManager{
         entitiesCreated=true;
     }
 
-    public void update(float deltaTime) {
+    public void update(float deltaTime) { //Überprüft den Status aller Entitäten und entfernt sie/fügt neue hinzu, wenn nötig
         if (gameManager.isGameRunning()) {
             for (Entity entity : entities) {
                 entity.update(deltaTime, 9.81f);
@@ -60,8 +60,13 @@ public class LevelManager{
                     }
                 }
             }
+            for(Entity entityToRemove : entitiesToRemove) {
+                if (entityToRemove instanceof PearlProjectile) pearlIsOnMap = false;
+            }
+            for (Entity entityToAdd : entitiesToAdd) {
+                if (entityToAdd instanceof PearlProjectile) pearlIsOnMap = true;
+            }
 
-            // Entferne die Entitäten aus der Liste nach der Iteration
             entities.removeAll(entitiesToRemove);
             entities.addAll(entitiesToAdd);
             entitiesToRemove.removeAll(entitiesToRemove);
@@ -70,7 +75,7 @@ public class LevelManager{
         }
         checkGameOver();
     }
-    public void render(OrthographicCamera camera, SpriteBatch batch) {
+    public void render(OrthographicCamera camera, SpriteBatch batch) {//rendert die "aktuellen" Entitäten
         for(Entity entity : entities) {
             entity.render(batch);
         }
@@ -82,12 +87,6 @@ public class LevelManager{
             gameOver=true;
         }
     }
-    public void switchRoom() {
-        gameManager.setRoom(gameManager.getLevel());
-        create();
-        gameMap = new TiledGameMap();
-    }
-
     public void switchRoom(int room) {
         gameManager.setRoom(room);
         create();
@@ -101,7 +100,7 @@ public class LevelManager{
         return true;
     }
 
-    protected void loadEntitiesFromJson(String jsonFilePath, boolean internal) {
+    protected void loadEntitiesFromJson(String jsonFilePath, boolean internal) { //lädt die Daten der Entitäten, die in der zum Level gehörenden entities.json Datei gespeichert sind, auf die Map
         Json json = new Json();
         ArrayList<EntityData> entityDataList = json.fromJson(ArrayList.class, EntityData.class, Gdx.files.local(jsonFilePath));
         if(internal)
@@ -110,9 +109,9 @@ public class LevelManager{
             entities.add(createEntityFromData(entityData));
         }
     }
-    private Entity createEntityFromData(EntityData entityData) {
+    private Entity createEntityFromData(EntityData entityData) {//Erstellt aus den Daten einer Entität das dazugehörige Objekt
         if ("Player".equals(entityData.getType())) {
-            return new Player(entityData.getId(), entityData.getX(), entityData.getY(), gameMap, entityData.getMaxHealth(), entityData.getHealth(), entityData.getAttackDamage(), entityData.getSpeed(), entityData.getJumpVelocity(), entityData.getWeaponID(), entityData.getSkin(), entityData.getGoldAmount());
+            return new Player(entityData.getId(), entityData.getX(), entityData.getY(), gameMap, entityData.getMaxHealth(), entityData.getAttackDamage(), entityData.getSpeed(), entityData.getJumpVelocity(), entityData.getWeaponID(), entityData.getSkin(), entityData.getGoldAmount());
         } else if ("Slime".equals(entityData.getType())) {
             return new Slime(entityData.getX(), entityData.getY(), gameMap, entityData.getMaxHealth(), entityData.getAttackDamage(), entityData.getSpeed(), entityData.getJumpVelocity(), entityData.getWeaponID());
         }
@@ -126,13 +125,12 @@ public class LevelManager{
         }
         else if ("Shop".equals(entityData.getType())) {
             return new ShopOwner(entityData.getX(), entityData.getY(), gameMap);
+        } else if ("Magican".equals(entityData.getType())) {
+            return new Magican(entityData.getX(), entityData.getY(), gameMap, entityData.getMaxHealth(), entityData.getJumpVelocity());
+        } else if("Bird".equals(entityData.getType())) {
+            return  new Bird((entityData.getX()), entityData.getY(), gameMap, entityData.getMaxHealth());
         }
         return null;
-    }
-    public int randomNumberGenerator (int low, int high) {
-        double doubleRandomNumber = Math.random()*high;
-        int randomNumber = (int)doubleRandomNumber+low;
-        return randomNumber;
     }
 
     public Player getPlayer() {
@@ -159,5 +157,8 @@ public class LevelManager{
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
+    }
+    public boolean pearlIsOnMap() {
+        return pearlIsOnMap;
     }
 }

@@ -20,12 +20,12 @@ public class GameEndScreen extends Interface{
         this.background = new Image(backgroundImage);
         this.background.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         super.create();
-        addImageButton((Gdx.graphics.getWidth()-buttonWidth)/2f, Gdx.graphics.getHeight()/2f+buttonHeight, buttonWidth, buttonHeight, buttonWidth, buttonHeight, "Interfaces/Buttons/LeaveButton2.png");
-        addImageButton((Gdx.graphics.getWidth()-buttonWidth)/2f, Gdx.graphics.getHeight()/2f-2*buttonHeight, buttonWidth, buttonHeight, buttonWidth, buttonHeight, "Interfaces/Buttons/DeleteButton.png");
+        addImageButton((Gdx.graphics.getWidth()-buttonWidth)/2f, Gdx.graphics.getHeight()/2f+buttonHeight, buttonWidth, buttonHeight, buttonWidth, buttonHeight, "Interfaces/Buttons/HomeButton.png");
+        addImageButton((Gdx.graphics.getWidth()-buttonWidth)/2f, Gdx.graphics.getHeight()/2f-2*buttonHeight, buttonWidth, buttonHeight, buttonWidth, buttonHeight, "Interfaces/Buttons/ResetButton.png");
     }
 
     @Override
-    public void onButtonClicked(int buttonIndex) {
+    public void onButtonClicked(int buttonIndex) {//Lädt einen Raum auf Grundlage der Aktion des Spielers
         if(buttonIndex==1) {
             levelManager.getPlayer().setHealth(levelManager.getPlayer().getMaxHealth());
             gameManager.setLevel(0);

@@ -14,8 +14,11 @@ public enum EntityType {
 	PLAYER("player", 16, 24, 40),
 	SLIME("slime", 12, 12, 30),
 	SHOP("shop", 16, 37, 40),
-
-	ELF("elf",16,14,40),
+	MAGICAN("magican", 16,14,30),
+	BIRD("bird",24,16,0),
+	EGG("egg",10,10,50),
+	PEARL("pearl",5,5,0),
+	ELF("elf",16,24,40),
 	BOOMERANG("boomerang", 12, 12, 0),
 	DONUTPROJECTILE("donutprojectile", 16, 16, 0),
 	TNT("tnt",16,16,20),

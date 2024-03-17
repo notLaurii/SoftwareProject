@@ -36,6 +36,7 @@ public class ItemMenu extends Interface{
         super.create();
         float backgroundWidth=this.background.getWidth();
         float backgroundHeight=this.background.getHeight();
+        //Für jedes Item des Typs wird aus der passenden ArrayList ein Knopf erstellt
         if(Objects.equals(type, "Weapons")) {
             for (Object weaponId : unlockedItems) {
                 addImageButton(this.background.getX() + backgroundWidth / 42+i*backgroundWidth/42*13, this.background.getY() + backgroundHeight - backgroundHeight * 13 / 56+y*backgroundHeight/56 * 13, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, "Entity/Weapons/" + weaponId + ".png");
@@ -81,7 +82,7 @@ public class ItemMenu extends Interface{
         super.render();
     }
 
-    public void onButtonClicked(int buttonIndex) {
+    public void onButtonClicked(int buttonIndex) {//wählt die Waffe, die zu dem gedrückten Knopf gehört aus, sofern sie freigeschaltet wurde
             Player player = levelManager.getPlayer();
             if (unlockedItems.size() > buttonIndex) {
                 if (Objects.equals(type, "Weapons")) {

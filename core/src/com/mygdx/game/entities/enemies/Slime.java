@@ -34,39 +34,11 @@ public class Slime extends Enemy {
 	}
 
 	@Override
-	public void update(float deltaTime, float gravity) {
+	public void update(float deltaTime, float gravity) {//führt dauerhaft alle möglichen Aktionen aus
 		if (canAct) {
-			if (grounded)
-				if (justLanded) {
-					attackPlayer(levelManager.getPlayer(), attackRangeX, attackRangeY);
-					startCooldown(0.3f);
-					jumpDirection = 0;
-					justLanded = false;
-				} else {
-					this.velocityY += jumpVelocity * getWeight();
-					justLanded = true;
-				}
-			if (!isEntityInRange(levelManager.getPlayer(), playerDetectionRangeX, playerDetectionRangeY)) {
-				if (jumpDirection == 0) {
-					int randomNumber2 = randomNumberGenerator(1, 2);
-					if (randomNumber2 == 1) {
-						jumpDirection = 1;
-					} else if (randomNumber2 == 2) {
-						jumpDirection = 2;
-					}
-				}
-
-			} else if (isEntityInRangeX(levelManager.getPlayer(), attackRangeX))
-				jumpDirection=0;
-			else if (levelManager.getPlayer().getX() >= this.pos.x)
-				jumpDirection = 1;
-			else
-				jumpDirection = 2;
-			if (jumpDirection == 1) {
-				moveX(speed * deltaTime);
-			} else if (jumpDirection == 2) {
-				moveX(-speed * deltaTime);
-			}
+			tryAttackingPlayer();
+			checkNextDirection();
+			moveInJumpDirection(deltaTime);
 		}
 		super.update(deltaTime, gravity);
 	}
@@ -76,8 +48,46 @@ public class Slime extends Enemy {
         int randomNumber = (int)doubleRandomNumber+low;
         return randomNumber;
 	}
-	
 
+	public void checkNextDirection() {//Checkt, ob der Spieler verfolgt werden soll oder zufällig gesprungen wird
+		if (!isEntityInRange(levelManager.getPlayer(), playerDetectionRangeX, playerDetectionRangeY)) {
+			if (jumpDirection == 0) {
+				int randomNumber2 = randomNumberGenerator(1, 2);
+				if (randomNumber2 == 1) {
+					jumpDirection = 1;
+				} else if (randomNumber2 == 2) {
+					jumpDirection = 2;
+				}
+			}
+
+		} else if (isEntityInRangeX(levelManager.getPlayer(), attackRangeX))
+			jumpDirection=0;
+		else if (levelManager.getPlayer().getX() >= this.pos.x)
+			jumpDirection = 1;
+		else
+			jumpDirection = 2;
+	}
+
+	public void moveInJumpDirection(float deltaTime){//bewegt den Slime in die festgelegte Sprungrichtung
+		if (jumpDirection == 1) {
+			moveX(speed * deltaTime);
+		} else if (jumpDirection == 2) {
+			moveX(-speed * deltaTime);
+		}
+	}
+	
+	public void tryAttackingPlayer() {//greift Spieler an, wenn möglich
+		if (grounded)
+			if (justLanded) {
+				attackPlayer(levelManager.getPlayer(), attackRangeX, attackRangeY);
+				startCooldown(0.3f);
+				jumpDirection = 0;
+				justLanded = false;
+			} else {
+				this.velocityY += jumpVelocity * getWeight();
+				justLanded = true;
+			}
+	}
 
 	public void startCooldown(float cooldown) {
 		canAct = false;
@@ -90,7 +100,7 @@ public class Slime extends Enemy {
 	}
 	
 	@Override
-	public void render(SpriteBatch batch) {
+	public void render(SpriteBatch batch) { //Stellt den Slime dar
 		batch.draw(image, pos.x, pos.y, getWidth(), getHeight());
 		super.render(batch);
 

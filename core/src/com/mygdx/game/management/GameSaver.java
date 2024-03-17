@@ -21,32 +21,26 @@ public class GameSaver {
         this.gameManager=gameManager;
     }
 
-    public void update(float deltaTime) {
-    }
-
-    public void savePlayerData(Player player) {
+    public void savePlayerData(Player player) {//Speichert die Daten des Characters in einer Klasse, um von dort die Json-Datei zu speichern
         String fileToPath="playerData.json";
         ArrayList<EntityData> dataList = readEntityDataFromFile(fileToPath);
-        // Durchlaufe die Liste und suche nach dem Spieler
         for (EntityData data : dataList) {
             if (data.getId() == player.getId()) {
                 data.setSkin(player.getSkin());
                 data.setJumpVelocity(player.getJumpVelocity());
                 data.setMaxHealth(player.getMaxHealth());
-                data.setHealth(player.getHealth());
                 data.setWeaponID(player.getWeaponID());
                 data.setAttackDamage(player.getAttackDamage());
                 data.setGoldAmount(player.getGoldAmount());
                 break;
             }
         }
-
         writeEntityDataToFile(fileToPath, dataList);
     }
-    public void saveGameProgress(Player player) {
+
+    public void saveGameProgress(Player player) {//Speichert die Spieldaten in einer Klasse, um von dort die Json-Datei zu speichern
         String fileToPath="gameProgress.json";
         ArrayList<GameProgress> dataList = readGameProgressFromFile(fileToPath);
-        // Durchlaufe die Liste und suche nach dem Spieler
         for (GameProgress data : dataList) {
             if (data.getPlayerId() == player.getId()) {
                 data.setLevel(level);
@@ -64,17 +58,16 @@ public class GameSaver {
         writeGameProgressToFile(fileToPath, dataList);
     }
 
-    private static ArrayList<EntityData> readEntityDataFromFile(String filePath) {
+    private static ArrayList<EntityData> readEntityDataFromFile(String filePath) {//Speichert die Daten aus der Json-Datei in der EntityData Klasse
         FileHandle file = Gdx.files.local(filePath);
         if(!file.exists()) {
             file=Gdx.files.internal("defaultPlayerData.json");
         }
         String jsonData = file.readString();
-        // Verwende eine Liste, um alle Daten zu speichern
         return new Json().fromJson(ArrayList.class, EntityData.class, jsonData);
     }
 
-    private static ArrayList<GameProgress> readGameProgressFromFile(String filePath) {
+    private static ArrayList<GameProgress> readGameProgressFromFile(String filePath) {//Speichert die Daten aus der Json-Datei in der GameProgress Klasse
         FileHandle file = Gdx.files.local(filePath);
         if(!file.exists()) {
             file=Gdx.files.internal("defaultGameProgress.json");
@@ -84,38 +77,25 @@ public class GameSaver {
         return new Json().fromJson(ArrayList.class, GameProgress.class, jsonData);
     }
 
-
-    private static void writeEntityDataToFile(String filePath, ArrayList<EntityData> dataList) {
+    private static void writeEntityDataToFile(String filePath, ArrayList<EntityData> dataList) {//Speichert die Daten aus der EntityData des Spielers in einer Json-Datei
         Json json = new Json();
         json.setUsePrototypes(false);
         json.setTypeName(null);
         json.setOutputType(JsonWriter.OutputType.json);
-
-        // Verwende prettyPrint, um die Ausgabe zu formatieren
         String jsonData = json.prettyPrint(dataList);
-
-        // Entferne zusätzliche Leerzeichen
         jsonData = jsonData.replace("\n", "").replace(" ", "");
-        // Schreibe die Daten in die Datei
         FileHandle file = Gdx.files.local(filePath);
         file.writeString(jsonData, false);
     }
-    private static void writeGameProgressToFile(String filePath, ArrayList<GameProgress> dataList) {
+    private static void writeGameProgressToFile(String filePath, ArrayList<GameProgress> dataList) { //Speichert die Daten aus der GameProgress Klasse in einer Json-Datei
         Json json = new Json();
         json.setUsePrototypes(false);
         json.setTypeName(null);
         json.setOutputType(JsonWriter.OutputType.json);
-
-        // Verwende prettyPrint, um die Ausgabe zu formatieren
         String jsonData = json.prettyPrint(dataList);
-
-        // Entferne zusätzliche Leerzeichen
         jsonData = jsonData.replace("\n", "").replace(" ", "");
-        // Schreibe die Daten in die Datei
         FileHandle file = Gdx.files.local(filePath);
         file.writeString(jsonData, false);
     }
-    public void setSaved(boolean value) {
-        this.saved=value;
-    }
+    
 }

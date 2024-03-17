@@ -13,6 +13,8 @@ import com.mygdx.game.weapons.Weapon;
 import com.mygdx.game.weapons.melees.Fists;
 import com.mygdx.game.weapons.rangedweapons.Boomerang;
 import com.mygdx.game.weapons.rangedweapons.Donut;
+import com.mygdx.game.weapons.rangedweapons.Egg;
+import com.mygdx.game.weapons.rangedweapons.Pearl;
 import com.mygdx.game.world.GameMap;
 
 import static com.mygdx.game.management.MyGdxGame.cam;
@@ -50,10 +52,7 @@ public abstract class Entity {
 		this.health=maxHealth;
 		this.attackDamage=attackDamage;
 	}
-	public void loadHealthBar() {
-
-	}
-	public void update (float deltaTime, float gravity) {
+	public void update (float deltaTime, float gravity) {//Checkt, ob sich die Entität in der Luft befindet und bewegt sie entsprechend
 		float newY = pos.y;
 
 		this.velocityY -= gravity * deltaTime * getWeight();
@@ -73,10 +72,18 @@ public abstract class Entity {
 
 	public abstract void render (SpriteBatch batch);
 
-	public void moveX (float amount) {
+	public void moveX (float amount) {//bewegt die Entität horizontal
 		float newX = pos.x + amount;
 		if (!map.doesEntityCollideWithMap(newX, pos.y, getWidth(), getHeight()))
 			this.pos.x = newX;
+	}
+
+
+	//für Entities ohne Gewicht
+	public void moveY (float amount) {//bewegt die Entität vertikal
+		float newY = pos.y + amount;
+		if (!map.doesEntityCollideWithMap(pos.x, newY, getWidth(), getHeight()))
+			this.pos.y = newY;
 	}
 
 	public Vector2 getPos() {
@@ -122,7 +129,7 @@ public abstract class Entity {
 	public float getWeight() {
 		return type.getWeight();
 	}
-	public boolean isEntityInRange(Entity entity, float rangeX, float rangeY) {
+	public boolean isEntityInRange(Entity entity, float rangeX, float rangeY) {//überprüft, ob sich eine andere Entität in Reichweite befindet
 		if(0<=entity.pos.x-this.pos.x&&entity.pos.x-this.pos.x<=entity.getWidth()||0<=this.pos.x-entity.pos.x&&this.pos.x-entity.pos.x<=this.getWidth())
 			if(0<=entity.pos.y-this.pos.y&&entity.pos.y-this.pos.y<=entity.getHeight()||0<=this.pos.y-entity.pos.y&&this.pos.y-entity.pos.y<=this.getHeight())
 				return true;
@@ -131,14 +138,14 @@ public abstract class Entity {
 				return true;
 		return false;
 	}
-	public boolean isEntityInRangeX(Entity entity, float rangeX) {
+	public boolean isEntityInRangeX(Entity entity, float rangeX) {//überprüft, ob sich eine andere Entität horizontal in Reichweite befindet
 		if(0<=entity.pos.x-this.pos.x&&entity.pos.x-this.pos.x<=entity.getWidth()||0<=this.pos.x-entity.pos.x&&this.pos.x-entity.pos.x<=this.getWidth())
 			return true;
 		if(Math.abs(entity.pos.x+entity.getWidth()-this.pos.x)<=rangeX||Math.abs(entity.pos.x-(this.pos.x+this.getWidth()))<=rangeX)
 			return true;
 		return false;
 	}
-	public boolean isEntityInRangeY(Entity entity, float rangeY) {
+	public boolean isEntityInRangeY(Entity entity, float rangeY) {//überprüft, ob sich eine andere Entität vertikal in Reichweite befindet
 		if(0<=entity.pos.y-this.pos.y&&entity.pos.y-this.pos.y<=entity.getHeight()||0<=this.pos.y-entity.pos.y&&this.pos.y-entity.pos.y<=this.getHeight())
 			return true;
 		if((Math.abs(entity.pos.y+entity.getHeight()-this.pos.y)<=rangeY)||Math.abs(entity.pos.y-(this.pos.y+this.getHeight()))<=rangeY)
@@ -146,28 +153,32 @@ public abstract class Entity {
 		return false;
 	}
 
-	public void takeDamage(float attackDamage) {
+	public void takeDamage(float attackDamage) {//Entität erhält Schaden
 		if (this.health != 0)
 			this.health-=attackDamage;
 	}
-	public void attackPlayer(Player player, float attackRangeX, float attackRangeY) {
+	public void attackPlayer(Player player, float attackRangeX, float attackRangeY) {//Entität greift Spieler an
 		if(isEntityInRange(player, attackRangeX, attackRangeY ))
 			player.takeDamage(attackDamage);
 	}
-	public Weapon assignWeapon(String weaponID) {
+	public Weapon assignWeapon(String weaponID) {//Gibt aus einer WeaponId eine Waffe zurück und weist dieser die Entität als Träger zu.
 		if ("fists".equals(weaponID))
 			return new Fists(map, this);
 		else if ("boomerang".equals(weaponID)) {
-			return new Boomerang(this.getX(), this.getY() + this.getHeight() / 2, map, this);
+			return new Boomerang(this.getX(), this.getY() + this.getHeight() / 2f, map, this);
 		}
 		else if ("donut".equals(weaponID)) {
-			return new Donut(this.getX(), this.getY() + this.getHeight() / 2, map, this);
+			return new Donut(this.getX(), this.getY() + this.getHeight() / 2f, map, this);
+		} else if ("pearl".equals(weaponID)) {
+			return new Pearl(this.getX(), this.getY() + this.getHeight() / 2f, map, this);
+		} else if ("egg".equals(weaponID)) {
+			return new Egg(this.getX(), this.getY() + this.getHeight() / 2f, map, this);
 		}
 		return null;
 	}
 	public String getDirection() {return direction;}
 	public void setDirection(String newDirection) {direction=newDirection;}
-	public void loadAnimationFrames(String animation, int priority, float deltaTime, int frameAmount, float frameDuration, String path) {
+	public void loadAnimationFrames(String animation, int priority, float deltaTime, int frameAmount, float frameDuration, String path) {//legt aktuellen Punkt in der Animation fest
 		if (!animation.equals(currentAnimation) && (animationTimer > frameCount * frameDuration || priority >= currentPriority)) {
 			this.animationTimer = 0;
 			this.animationTexture = new Texture(path);
@@ -179,7 +190,7 @@ public abstract class Entity {
 		this.frameHeight = animationTexture.getHeight();
 		this.animationTimer += deltaTime;
 	}
-	public void updateAnimation(float deltaTime) {
+	public void updateAnimation(float deltaTime) {//passt Animation an die vergangene Zeit an
 		this.stateTime += deltaTime;
 		this.currentFrame = (int) (stateTime / frameDuration) % frameCount;
 	}
@@ -188,7 +199,7 @@ public abstract class Entity {
 		return isTouched;
 	}
 
-	public void checkIsTouched() {
+	public void checkIsTouched() {//überprüft ob die Entität mit der Maus berührt wird
 		Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 		cam.unproject(mousePos);
 		if (this.pos.x <= mousePos.x && mousePos.x <= this.pos.x + getWidth() &&

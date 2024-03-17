@@ -32,13 +32,12 @@ public class Player extends Entity {
 	private int goldAmount;
 	private boolean tnt = false;
 
-	public Player(int id, float x, float y, GameMap map, float maxHealth, float health, float attackDamage, float speed, float jumpVelocity, String weaponID, String skin, int goldAmount) {
+	public Player(int id, float x, float y, GameMap map, float maxHealth, float attackDamage, float speed, float jumpVelocity, String weaponID, String skin, int goldAmount) {
 		super(x, y, EntityType.PLAYER, map, maxHealth, attackDamage);
 		this.speed=speed;
 		this.jumpVelocity=jumpVelocity;
 		this.weaponID=weaponID;
 		this.weapon=assignWeapon(weaponID);
-		this.health=health;
 		this.skin=skin;
 		setAnimation("Stand", 0, 0);
 		healthBar=new Texture("Entity/Player/Overlay/PlayerHealthBar.png");
@@ -46,7 +45,7 @@ public class Player extends Entity {
 		this.goldAmount=goldAmount;
 	}
 
-	public void setAnimation(String animation, int priority, float deltaTime) {
+	public void setAnimation(String animation, int priority, float deltaTime) {//legt fest, welche Animation ausgeführt wird
 			int frameAmount=0;
 			float frameTime=0;
 		String data="";
@@ -72,7 +71,7 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public void update(float deltaTime, float gravity) {
+	public void update(float deltaTime, float gravity) {//Überprüft Aktionen des Spielers in Reaktion auf Drücken von Tasten (keine Zeit, um dies im Input-Manager hinzuzufügen)
 		super.update(deltaTime, gravity);
 		setAnimation("Stand", 1, deltaTime);
 		if (Gdx.input.isKeyPressed(Keys.SPACE) && grounded)
@@ -106,7 +105,7 @@ public class Player extends Entity {
 		moveCamX();
 	}
 
-	public void moveCamX() {
+	public void moveCamX() {//bewegt die Kamera in horizontaler Richtung
 			if (pos.x > MyGdxGame.getWidth() / 2 && pos.x < MyGdxGame.gameMap.getPixelWidth() - MyGdxGame.getWidth() / 2) {
 				cam.position.x = pos.x;
 			} else if (pos.x <= MyGdxGame.getWidth() / 2) {
@@ -116,16 +115,7 @@ public class Player extends Entity {
 			}
 	}
 
-	public float getDeltaX(float amount) {
-		if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.A)) {
-			float newX = pos.x + amount;
-			if (!map.doesEntityCollideWithMap(newX, pos.y, getWidth(), getHeight()))
-				return amount;
-		}
-		return 0f;
-	}
-
-	public void moveCamY(float y) {
+	public void moveCamY(float y) {//bewegt die Kamera in Y-Richtung auf festgelegten Höhen
 		int heightLevel=(int) Math.floor((pos.y+getHeight())/MyGdxGame.getHeight());
 		if(heightLevel==0)
 			cam.position.y = MyGdxGame.getHeight()/2;
@@ -135,11 +125,11 @@ public class Player extends Entity {
 			cam.position.y = heightLevel*MyGdxGame.getHeight()+MyGdxGame.getHeight()/2-TileType.TILE_SIZE;
 		cam.update();
 	}
+
 	public void render(SpriteBatch batch) {
 		weapon.render(cam, batch);
 		// CharacterAnimation rendern
 		float frameX = currentFrame * frameWidth;
-		float frameY = 0; // Der Y-Wert im Bild bleibt 0, da es sich um eine einzelne Zeile handelt
 
 		// HealthBar rendern
 		float healthRatio = Math.abs(health / maxHealth);
@@ -147,17 +137,17 @@ public class Player extends Entity {
 		int textureY = NUM_HEALTH_BARS - numBarsToShow;
 
 		// Zeichnen der Bilder
-		batch.draw(animationTexture, pos.x, pos.y, 0, 0, getWidth(), getHeight(), 1, 1, 0, (int) frameX, (int) frameY, frameWidth, frameHeight, false, false);
+		batch.draw(animationTexture, pos.x, pos.y, 0, 0, getWidth(), getHeight(), 1, 1, 0, (int) frameX, 0, frameWidth, frameHeight, false, false);
 		batch.draw(healthBar, pos.x + getWidth() / 2f - HEALTH_BAR_WIDTH / 2f, (float) (pos.y + 1.1 * getHeight()), HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT,
 				0, HEALTH_BAR_HEIGHT * textureY, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT, false, false);
 	}
 
-	public void switchWeapon(String weaponId) {
+	public void switchWeapon(String weaponId) {//Tauscht die ausgewählte Waffe aus
 		setWeaponID(weaponId);
 		this.weapon=assignWeapon(weaponID);
 	}
 
-	public void actOnLeftClick(float deltaTime) {
+	public void actOnLeftClick(float deltaTime) {//führt Aktion aus, wenn LMB gedrückt wird
 		if (this.weapon.getCanAttack()) {
 			setAnimation("Attack", 2, deltaTime);
 		}

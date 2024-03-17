@@ -21,11 +21,11 @@ public class DeathScreen extends Interface{
         this.background.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         super.create();
         addImageButton((Gdx.graphics.getWidth()-buttonWidth)/2f, Gdx.graphics.getHeight()/2f+buttonHeight, buttonWidth, buttonHeight, buttonWidth, buttonHeight, "Interfaces/Buttons/RetryButton.png");
-        addImageButton((Gdx.graphics.getWidth()-buttonWidth)/2f, Gdx.graphics.getHeight()/2f-2*buttonHeight, buttonWidth, buttonHeight, buttonWidth, buttonHeight, "Interfaces/Buttons/LeaveButton.png");
+        addImageButton((Gdx.graphics.getWidth()-buttonWidth)/2f, Gdx.graphics.getHeight()/2f-2*buttonHeight, buttonWidth, buttonHeight, buttonWidth, buttonHeight, "Interfaces/Buttons/HomeButton.png");
     }
 
     @Override
-    public void onButtonClicked(int buttonIndex) {
+    public void onButtonClicked(int buttonIndex) {//Lädt einen Raum auf Grundlage der Aktion des Spielers
         if(buttonIndex==0) {
             levelManager.switchRoom(gameManager.getLevel());
         }

@@ -30,7 +30,7 @@ public class ShopMenu extends Interface{
     }
 
     @Override
-    public void create() {
+    public void create() { //Der Screen wird inklusive Buttons für jedes kaufbare Item erstellt
         removePlayerProjectiles();
         int i=0;
         int y=0;
@@ -72,7 +72,7 @@ public class ShopMenu extends Interface{
         super.render();
     }
 
-    public void onButtonClicked(int buttonIndex) {
+    public void onButtonClicked(int buttonIndex) {//Fügt gekaufte Items den freigeschalteten hinzu. Zieht dem GoldCount des Spielers den Preis des gekauften Items ab.
         if (buttonIndex == 0) {
             if (Objects.equals(type, "Weapons")) {
                 owner.setMenu(new ShopMenu(gameManager.getPurchasableSkins(), gameManager.getUnlockedSkins(), "Skins", owner));
@@ -85,7 +85,7 @@ public class ShopMenu extends Interface{
             } else if (Objects.equals(type, "Skins")) {
                 owner.setMenu(new ShopMenu(gameManager.getPurchasableWeapons(), gameManager.getUnlockedWeapons(), "Weapons", owner));
             }
-        } //0 und 1 nur gleich, da es keine kaufbaren fähigkeiten gibt
+        } //0 und 1 sind nur gleich, da es keine kaufbaren Fähigkeiten gibt
         else {
             int itemPrice=0;
             Player player = levelManager.getPlayer();

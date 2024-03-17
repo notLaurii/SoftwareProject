@@ -19,20 +19,20 @@ public class Inventory extends Interface {
         this.background.setSize((16f/19)*(2f/3)* Gdx.graphics.getHeight(), (2f/3)*Gdx.graphics.getHeight());
         this.background.setPosition((Gdx.graphics.getWidth()-background.getWidth())/2, (Gdx.graphics.getHeight()-background.getHeight())/2);
         super.create();
-        addWeaponButton(); //Add weaponButton to the stage to perform rendering and take input.
+        addWeaponButton();
         addSkinButton();
     }
 
-    public void addWeaponButton() {
+    public void addWeaponButton() {//Fügt einen Button für die Waffenauswahl hinzu
         addImageButton(this.background.getX()+this.background.getWidth()/64*8f, this.background.getY()+this.background.getHeight()/76*42f,this.background.getWidth()*10/64, this.background.getHeight()*10/76, this.background.getWidth()*8/64, this.background.getHeight()*8/76, "Entity/Weapons/"+levelManager.getPlayer().getWeaponID()+".png");
     }
 
-    public void addSkinButton() {
+    public void addSkinButton() {//Fügt einen Button für die Skinauswahl hinzu
         addImageButton(this.background.getX()+this.background.getWidth()/64*24, this.background.getY()+this.background.getHeight()/76*34, this.background.getWidth()*20/64, this.background.getHeight()*29/76, this.background.getWidth()*16/64, this.background.getHeight()*24/76,"Entity/Player/"+levelManager.getPlayer().getSkin()+"/Stand/"+levelManager.getPlayer().getSkin()+"StandFront.png");
     }
-
+    //Fähigkeiten haben wir zu spät hinzugefügt
     @Override
-    public void onButtonClicked(int buttonIndex) {
+    public void onButtonClicked(int buttonIndex) {//erstellt ein ItemMenu, welches je nach gedrückten Knopf unterschiedlich ist
             if (buttonIndex == 0) {
                 menu = new ItemMenu(gameManager.getAllWeapons(), gameManager.getUnlockedWeapons(), "Weapons");
             } else if (buttonIndex == 1) {

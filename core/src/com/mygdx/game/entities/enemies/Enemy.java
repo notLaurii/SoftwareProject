@@ -30,6 +30,6 @@ public class Enemy extends Entity {
         batch.draw(healthBar, pos.x+getWidth()/2-HEALTH_BAR_WIDTH/2, (float) (pos.y + 1.1*getHeight()), HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT,
                    0, HEALTH_BAR_HEIGHT * textureY, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT, false, false);
     }
-	public int getGoldDrop() { return goldDrop;}
+	public int getGoldDrop() { return goldDrop;} //Gibt aus, wie viel Gold bei der Vernichtung eines Objekts dieser Klasse fallengelassen wird
 
 }
