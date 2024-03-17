@@ -6,30 +6,29 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.entities.EntityType;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.world.GameMap;
-import sun.text.SupplementaryCharacterData;
 
 public class Gold extends Item {
     Texture image;
+    int value;
 
-    public Gold(float x, float y, GameMap map) {
-        super(x,y,EntityType.GOLD,"neutral", map, 0,0);
-        this.pos = new Vector2(x,y);
-        this.type = type;
-        this.map = map;
-        image = new Texture("Entity/Item/Gold/Gold2.png");
+    public Gold(float x, float y, GameMap map, int value) {
+        super(x, y, EntityType.GOLD, map);
+        this.image = new Texture("Entity/Item/Gold/Gold.png");
+        this.value=value;
     }
 
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
 
     @Override
     public void render(SpriteBatch batch) {
         batch.draw(image, pos.x, pos.y);
     }
-
-    @Override
-    public void update(float deltaTime, float gravity) {
-        super.update(deltaTime, gravity);
-    }
-
 }
 
 

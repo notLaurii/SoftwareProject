@@ -3,16 +3,13 @@ package com.mygdx.game.interfaces;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.Player;
-import com.mygdx.game.entities.projectiles.Projectile;
-import com.mygdx.game.weapons.Weapon;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-import static com.mygdx.game.management.MyGdxGame.*;
+import static com.mygdx.game.management.MyGdxGame.gameManager;
+import static com.mygdx.game.management.MyGdxGame.levelManager;
 
 public class ItemMenu extends Interface{
 
@@ -32,7 +29,7 @@ public class ItemMenu extends Interface{
     public void create() {
         int i=0;
         int y=0;
-        this.backgroundImage = new Texture(Gdx.files.internal("Interfaces/selectMenu.png"));
+        this.backgroundImage = new Texture(Gdx.files.internal("Interfaces/darkBackground.png"));
         this.background = new Image(backgroundImage);
         this.background.setSize((3f/4)*(3f/4)* Gdx.graphics.getHeight(), (3f/4)*Gdx.graphics.getHeight());
         this.background.setPosition((Gdx.graphics.getWidth()-background.getWidth())/2, (Gdx.graphics.getHeight()-background.getHeight())/2);
@@ -41,7 +38,7 @@ public class ItemMenu extends Interface{
         float backgroundHeight=this.background.getHeight();
         if(Objects.equals(type, "Weapons")) {
             for (Object weaponId : unlockedItems) {
-                addButton(this.background.getX() + backgroundWidth / 42+i*backgroundWidth/42*13, this.background.getY() + backgroundHeight - backgroundHeight * 13 / 56+y*backgroundHeight/56 * 13, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, "Entity/Weapons/" + weaponId + ".png");
+                addImageButton(this.background.getX() + backgroundWidth / 42+i*backgroundWidth/42*13, this.background.getY() + backgroundHeight - backgroundHeight * 13 / 56+y*backgroundHeight/56 * 13, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, "Entity/Weapons/" + weaponId + ".png");
                 if(i==2) {
                     i = 0;
                     y++;
@@ -50,7 +47,7 @@ public class ItemMenu extends Interface{
             }
             for (Object weaponId : items) {
                 if (!unlockedItems.contains(weaponId)) {
-                    addButton(this.background.getX() + backgroundWidth / 42 + i * backgroundWidth / 42 * 13, this.background.getY() + backgroundHeight - backgroundHeight * 13 / 56 + y * backgroundHeight / 56 * 13, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, "Entity/Weapons/" + weaponId + "Locked.png");
+                    addImageButton(this.background.getX() + backgroundWidth / 42 + i * backgroundWidth / 42 * 13, this.background.getY() + backgroundHeight - backgroundHeight * 13 / 56 + y * backgroundHeight / 56 * 13, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, "Entity/Weapons/" + weaponId + "Locked.png");
                     if (i == 2) {
                         i = 0;
                         y++;
@@ -59,14 +56,22 @@ public class ItemMenu extends Interface{
             }
         }
         else if(Objects.equals(type, "Skins")) {
-            System.out.println(items);
-            for (Object skin : items) {
-                addButton(this.background.getX() + backgroundWidth / 42+i*backgroundWidth/42*13, this.background.getY() + backgroundHeight - backgroundHeight * 13 / 56+y*backgroundHeight/56 * 13, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, "Entity/Player/"+skin+ "/Stand/" + skin + "StandFront.png");
+            for (Object skin : unlockedItems) {
+                addImageButton(this.background.getX() + backgroundWidth / 42+i*backgroundWidth/42*13, this.background.getY() + backgroundHeight - backgroundHeight * 13 / 56+y*backgroundHeight/56 * 13, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, "Entity/Player/"+skin+ "/Stand/" + skin + "StandFront.png");
                 if(i==2) {
                     i = 0;
                     y++;
                 }
                 else i++;
+            }
+            for (Object skin : items) {
+                if(!unlockedItems.contains(skin)) {
+                    addImageButton(this.background.getX() + backgroundWidth / 42 + i * backgroundWidth / 42 * 13, this.background.getY() + backgroundHeight - backgroundHeight * 13 / 56 + y * backgroundHeight / 56 * 13, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, backgroundWidth * 12 / 42, backgroundHeight * 12 / 56, "Entity/Player/" + skin + "/Stand/" + skin + "StandFrontLocked.png");
+                    if (i == 2) {
+                        i = 0;
+                        y++;
+                    } else i++;
+                }
             }
         }
     }
@@ -77,25 +82,19 @@ public class ItemMenu extends Interface{
     }
 
     public void onButtonClicked(int buttonIndex) {
-        Player player =levelManager.getPlayer();
-        if(Objects.equals(type, "Weapons")) {
-            if(unlockedItems.size()>buttonIndex) {
-                player.switchWeapon(unlockedItems.get(buttonIndex));
-                gameManager.updateInventory();
-                for(Entity entity : levelManager.entities)
-                    if(entity instanceof Projectile) {
-                        if(((Projectile) entity).getShooter()== player)
-                            levelManager.entitiesToRemove.add(entity);
-                    }
-            }
-        }
-        else if(Objects.equals(type, "Skins")) {
-            if(unlockedItems.contains(items.get(buttonIndex))) {
-                player.setSkin(items.get(buttonIndex));
-                System.out.println(buttonIndex + " " + items.get(buttonIndex));
-                gameManager.updateInventory();
-                player.update(0, 9.81f);
-            }
+            Player player = levelManager.getPlayer();
+            if (unlockedItems.size() > buttonIndex) {
+                if (Objects.equals(type, "Weapons")) {
+                    player.switchWeapon(unlockedItems.get(buttonIndex));
+                    gameManager.updateInventory();
+                    gameManager.getOpenInterfaces().remove(this);
+                    removePlayerProjectiles();
+                } else if (Objects.equals(type, "Skins")) {
+                    player.setSkin(unlockedItems.get(buttonIndex));
+                    gameManager.updateInventory();
+                    player.update(0, 9.81f);
+                    gameManager.getOpenInterfaces().remove(this);
+                }
         }
     }
 }

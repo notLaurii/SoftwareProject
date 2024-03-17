@@ -12,7 +12,7 @@ import static com.mygdx.game.management.MyGdxGame.levelManager;
 public class Donut extends RangedWeapon{
     private Texture image;
     public Donut(float x, float y, GameMap map, Entity wielder) {
-        super(x, y, 25, map, wielder, 1.5f);
+        super(x, y, 25, map, wielder, 1.5f, 20);
         this.image=new Texture("Entity/Weapons/donut.png");
     }
 

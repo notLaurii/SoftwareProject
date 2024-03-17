@@ -15,6 +15,7 @@ public class EntityData {
     private float jumpVelocity;
     private String weaponID;
     private String skin;
+    private int goldAmount;
 
     public String getType() {
         return type;
@@ -66,6 +67,14 @@ public class EntityData {
 
     public float getAttackDamage() {
         return attackDamage;
+    }
+
+    public int getGoldAmount() {
+        return goldAmount;
+    }
+
+    public void setGoldAmount(int goldAmount) {
+        this.goldAmount = goldAmount;
     }
 
     public void setAttackDamage(float attackDamage) {

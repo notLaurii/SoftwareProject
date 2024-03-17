@@ -33,8 +33,10 @@ public class GameSaver {
                 data.setSkin(player.getSkin());
                 data.setJumpVelocity(player.getJumpVelocity());
                 data.setMaxHealth(player.getMaxHealth());
+                data.setHealth(player.getHealth());
                 data.setWeaponID(player.getWeaponID());
                 data.setAttackDamage(player.getAttackDamage());
+                data.setGoldAmount(player.getGoldAmount());
                 break;
             }
         }

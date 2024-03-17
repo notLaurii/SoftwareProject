@@ -23,7 +23,7 @@ public abstract class Projectile extends Entity {
         protected ArrayList<Entity> entitiesHit= new ArrayList<>();
 
         public Projectile(float x, float y, EntityType type, GameMap map, float attackDamage, Entity shooter) {
-            super(x, y, type, "projectile", map, 100, attackDamage);
+            super(x, y, type, map, 100, attackDamage);
             this.shooter=shooter;
         }
 
@@ -33,7 +33,7 @@ public abstract class Projectile extends Entity {
         }
 
     public void checkHit(float damage) {
-        ArrayList<Entity> entities = levelManager.entities;
+        ArrayList<Entity> entities = levelManager.getEntities();
         for(Entity entity : entities) {
             if (entity != getShooter() && entity != this && entity.isEntityInRange(this, 0, 0)) {
                     if (!entitiesHit.contains(entity)) {

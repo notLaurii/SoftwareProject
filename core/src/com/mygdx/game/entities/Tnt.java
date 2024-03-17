@@ -22,7 +22,7 @@ public class Tnt extends PhysicalAbility {
     private boolean explosionStatus = false;
 
     public Tnt(float x, float y, GameMap map) {
-        super(x, y, EntityType.TNT, "physicalAbility", map, 0, 100);
+        super(x, y, EntityType.TNT, map, 0, 100);
         image  = new Texture("Entity/Ability/Tnt/tnt.png");
     }
 
@@ -38,7 +38,7 @@ public class Tnt extends PhysicalAbility {
             //setWidth(getWidth()*2);
             //setHeight(getHeight()*2);
             explosionStatus = true;
-            for (Entity entity : levelManager.entities) {
+            for (Entity entity : levelManager.getEntities()) {
             if(isEntityInRange(entity,20,20)) {
                 if(entity.getHealth() - attackDamage <= 0) {
                     entity.setHealth(0);
@@ -56,7 +56,7 @@ public class Tnt extends PhysicalAbility {
 
     public boolean isPlaced() {return placeStatus;}
 
-    public boolean isExplosed() {return explosionStatus;}
+    public boolean isExploded() {return explosionStatus;}
 
     public void placing() {
         placeStatus = true;

@@ -21,14 +21,8 @@ public class Elf extends Enemy {
 
     private static float speed;
     private static float jumpVelocity;
-    private float playerDetectionRangeX=182;
-    private float playerDetectionRangeY=64;
-    private float attackRangeX=0;
-    private float attackRangeY=0;
     private boolean canAct=true;
-    private boolean justLanded=true;
     Texture image;
-    Texture sword;
     private  boolean SchwertAusgestreckt = false;
     private boolean canJump =true;
 
@@ -82,7 +76,7 @@ public class Elf extends Enemy {
     }
     public void schlagen() {
         if(levelManager.getPlayer() != null && levelManager.getPlayer().getHealth() > 0) {
-            if (isEntityInRange(levelManager.getPlayer(), 20, 20)) {
+            if (isEntityInRange(levelManager.getPlayer(), 16, 8)) {
                 if (!istSchwertAusgestreckt() && canAct) {
                     SchwertAusgestreckt = true;
                     levelManager.getPlayer().setHealth(levelManager.getPlayer().getHealth() - attackDamage);
