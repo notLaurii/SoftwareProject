@@ -16,7 +16,7 @@ public class EggProjectile extends Projectile {
     private float attackRangeX = 10;
     private float attackRangeY = 0;
 
-    private boolean isOnGround = false;
+    private boolean isOnPlayer = false;
     public EggProjectile(GameMap map, Entity shooter) {
         super(shooter.getX(), shooter.getY(), EntityType.EGG, map, 30, shooter);
         this.image=new Texture("Entity/Projectile/eggProjectile.png");
@@ -39,19 +39,22 @@ public class EggProjectile extends Projectile {
             grounded = false;
         }
 
-        if(isGrounded()) {
-            if(!isOnGround) attackPlayer(levelManager.getPlayer(),attackRangeX,attackRangeY);
-            isOnGround = true;
-            image = new Texture("Entity/Projectile/fried_egg.png");
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    remove();
-                }
-            },3);
+            if(!isOnPlayer) {
+                attackPlayer(levelManager.getPlayer(),attackRangeX,attackRangeY);
+                isOnPlayer = true;
+            }
+            if(isGrounded()) {
+                image = new Texture("Entity/Projectile/fried_egg.png");
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        remove();
+                    }
+                }, 3);
+            }
 
 
-        }
+
     }
     public void remove() {
         levelManager.entitiesToRemove.add(this);

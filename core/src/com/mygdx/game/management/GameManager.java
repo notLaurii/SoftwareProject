@@ -48,7 +48,6 @@ public class GameManager {
     }
 
     public void update(float deltaTime) {
-        System.out.println(openInterfaces);
         Player player = levelManager.getPlayer();
         if(!openInterfaces.contains(inventory)) {
             inventory = null;

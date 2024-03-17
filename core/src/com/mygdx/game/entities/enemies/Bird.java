@@ -42,7 +42,7 @@ public class Bird extends Enemy {
             }, 3);
         }
 
-        //Sterben an Alterschwäche
+        //Der Vogel stirbt nach x Sekunden aufgrund von Altersschwäche
         if(!birthday) {
             birthday=true;
         Timer.schedule(new Timer.Task() {
@@ -72,9 +72,6 @@ public class Bird extends Enemy {
             moveX(-speed);
             setDirection("Left");
         }
-    }
-    public void gettingOlder() {
-
     }
 
     public void setAnimation(String animation, int priority, float deltaTime) {

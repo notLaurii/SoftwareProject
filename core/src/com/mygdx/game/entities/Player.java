@@ -73,6 +73,7 @@ public class Player extends Entity {
 
 	@Override
 	public void update(float deltaTime, float gravity) {
+		System.out.println(speed);
 		super.update(deltaTime, gravity);
 		setAnimation("Stand", 1, deltaTime);
 		if (Gdx.input.isKeyPressed(Keys.SPACE) && grounded)

@@ -125,7 +125,7 @@ public class LevelManager{
         else if ("Boomerang".equals(entityData.getType())) {
             return new BoomerangProjectile(gameMap, player, 5);
         } else if ("Elf".equals(entityData.getType())) {
-            return new Elf(entityData.getX(), entityData.getY(), gameMap, entityData.getMaxHealth(), entityData.getAttackDamage(), entityData.getSpeed(), entityData.getJumpVelocity(), entityData.getWeaponID());
+            return new Elf(entityData.getX(), entityData.getY(), gameMap, entityData.getMaxHealth(), entityData.getAttackDamage(), entityData.getJumpVelocity());
         }
         else if ("Tnt".equals(entityData.getType())) {
             return new Tnt(entityData.getX(), entityData.getY(), gameMap);

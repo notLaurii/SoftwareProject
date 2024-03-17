@@ -32,14 +32,15 @@ public class PearlProjectile extends Projectile{
     public void followPlayer() {
         float x = levelManager.getPlayer().getX() - getX();
         float y = levelManager.getPlayer().getY() - getY();
-        if(isEntityInRange(levelManager.getPlayer(), 5,10)) {
+        if(isEntityInRange(levelManager.getPlayer(), 5,5)) {
             levelManager.getPlayer().takeDamage(attackDamage);
             levelManager.entitiesToRemove.add(this);
+            float speed2 = levelManager.getPlayer().getSpeed();
             levelManager.getPlayer().setSpeed(levelManager.getPlayer().getSpeed()/2);
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    levelManager.getPlayer().setSpeed(levelManager.getPlayer().getSpeed()*2);
+                    levelManager.getPlayer().setSpeed(speed2);
                 }
             },2);
         } else {

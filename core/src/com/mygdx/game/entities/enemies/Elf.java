@@ -4,34 +4,35 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Timer;
+import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.EntityType;
-import com.mygdx.game.entities.Player;
-import com.mygdx.game.entities.enemies.Enemy;
-import com.mygdx.game.management.LevelManager;
+import com.mygdx.game.entities.projectiles.PearlProjectile;
 import com.mygdx.game.world.GameMap;
-import jdk.internal.org.jline.terminal.TerminalBuilder;
-import sun.jvm.hotspot.debugger.cdbg.Sym;
-
 import java.util.Objects;
 
-import static com.mygdx.game.management.MyGdxGame.gameManager;
+import static com.mygdx.game.management.MyGdxGame.gameMap;
 import static com.mygdx.game.management.MyGdxGame.levelManager;
 
 public class Elf extends Enemy {
-
-    private static float speed;
+    private float speed =1f;
     private static float jumpVelocity;
     private boolean canAct=true;
     Texture image;
-    private  boolean SchwertAusgestreckt = false;
+    private float attackRangeX = 20;
+    private float attackRangeY = 0;
+    private  boolean schwertAusgestreckt = false;
     private boolean canJump =true;
+    private boolean canCount = true;
 
-    public Elf(float x, float y, GameMap map, float health, float attackDamage, float speed, float jumpVelocity, String WeaponID) {
+
+
+    public Elf(float x, float y, GameMap map, float health, float attackDamage, float jumpVelocity) {
         super(x, y, EntityType.ELF, map, health, attackDamage, 10);
         image = new Texture("Entity/Enemy/Elf/elf.png");
-        this.speed=speed;
         this.jumpVelocity=jumpVelocity;
     }
+
+
 
     @Override
     public void update(float deltaTime, float gravity) {
@@ -45,59 +46,65 @@ public class Elf extends Enemy {
     }
     public void verfolgen() {
         if(levelManager.getPlayer() != null && levelManager.getPlayer().getHealth() > 0) {
-        float x = levelManager.getPlayer().getX() - getX();
-        if (x > 10) {
-            moveX(1f);
-            setDirection("Right");
-            if(istSchwertAusgestreckt()) {
-                setImage(new Texture("Entity/Enemy/Elf/Sword/elf_right_hit.png"));
-            } else setImage(new Texture("Entity/Enemy/Elf/Sword/elf_right.png"));
-        } else if (x < -10) {
-            moveX(-1f);
-            setDirection("Left");
-            if(istSchwertAusgestreckt()) {
-               setImage(new Texture("Entity/Enemy/Elf/Sword/elf_left_hit.png"));
-            } else setImage(new Texture("Entity/Enemy/Elf/Sword/elf_left.png"));
-        } else moveX(0);
+            float x = levelManager.getPlayer().getX() - getX();
+            if(canCount) {
+                canCount = false;
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        float x2 = levelManager.getPlayer().getX() - getX();
+                        canCount = true;
+                        if(x2 == x && canJump) {
+                            jump();
+                        }
+                    }
+                }, 0.5f);
 
-        float y = levelManager.getPlayer().getY() - getY();
-        if(y>0 && isGrounded() && canJump && levelManager.getPlayer().getHealth() > 0){
-            this.velocityY += jumpVelocity * getWeight();
-            canJump = false;
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    canJump = true;
-                }
-            }, 2);
-        }
+            }
+            if (x > speed*5) {
+                moveX(speed);
+                setDirection("Right");
+                if(istSchwertAusgestreckt()) {
+                    setImage(new Texture("Entity/Enemy/Elf/Sword/elf_right_hit.png"));
+                } else setImage(new Texture("Entity/Enemy/Elf/Sword/elf_right.png"));
+            } else if (x < -speed*5) {
+                moveX(-speed);
+                setDirection("Left");
+                if(istSchwertAusgestreckt()) {
+                    setImage(new Texture("Entity/Enemy/Elf/Sword/elf_left_hit.png"));
+                } else setImage(new Texture("Entity/Enemy/Elf/Sword/elf_left.png"));
+            }
+
+            float y = levelManager.getPlayer().getY() - getY();
+            if(y>0 && isGrounded() && canJump && levelManager.getPlayer().getHealth() > 0){
+                jump();
+            }
 
         }
     }
     public void schlagen() {
         if(levelManager.getPlayer() != null && levelManager.getPlayer().getHealth() > 0) {
-            if (isEntityInRange(levelManager.getPlayer(), 16, 8)) {
+            if (isEntityInRange(levelManager.getPlayer(), attackRangeX, attackRangeY)) {
                 if (!istSchwertAusgestreckt() && canAct) {
-                    SchwertAusgestreckt = true;
-                    levelManager.getPlayer().setHealth(levelManager.getPlayer().getHealth() - attackDamage);
+                    attackPlayer(levelManager.getPlayer(),attackRangeX,attackRangeY);
+                    if(Objects.equals(getDirection(), "Right")) {
+                        setImage(new Texture("Entity/Enemy/Elf/Sword/elf_right_hit.png"));
+                    } else if(Objects.equals(getDirection(), "Left")) setImage(new Texture("Entity/Enemy/Elf/Sword/elf_left_hit.png"));
+                    schwertAusgestreckt = true;
+                    canAct = false;
                     Timer.schedule(new Timer.Task() {
                         @Override
                         public void run() {
                             if(Objects.equals(getDirection(), "Right")) {
-                                setImage(new Texture("Entity/Enemy/Elf/Sword/elf_right_hit.png"));
-                                System.out.println("schlag!");
-                            } else if(Objects.equals(getDirection(), "Left")) setImage(new Texture("Entity/Enemy/Elf/Sword/elf_left_hit.png"));
+                                setImage(new Texture("Entity/Enemy/Elf/Sword/elf_right.png"));
+                            } else if(Objects.equals(getDirection(), "Left")) setImage(new Texture("Entity/Enemy/Elf/Sword/elf_left.png"));
                         }
-                    }, 1);
-                    canAct = false;
-                    if(Objects.equals(getDirection(), "Right")) {
-                        setImage(new Texture("Entity/Enemy/Elf/Sword/elf_right.png"));
-                    } else if(Objects.equals(getDirection(), "Left")) setImage(new Texture("Entity/Enemy/Elf/Sword/elf_left.png"));
+                    }, 0.3f);
                     Timer.schedule(new Timer.Task() {
                         @Override
                         public void run() {
                             canAct = true;
-                            SchwertAusgestreckt = false;
+                            schwertAusgestreckt = false;
                         }
                     }, 1);
                 }
@@ -105,8 +112,8 @@ public class Elf extends Enemy {
                 if(Objects.equals(getDirection(), "Right")) {
                     setImage(new Texture("Entity/Enemy/Elf/Sword/elf_right.png"));
                 } else if(Objects.equals(getDirection(), "Left")) setImage(new Texture("Entity/Enemy/Elf/Sword/elf_left.png"));
-                SchwertAusgestreckt = false;
-              }
+                schwertAusgestreckt = false;
+            }
         } else {
             if(Objects.equals(getDirection(), "Right")) {
                 setImage(new Texture("Entity/Enemy/Elf/Sword/elf_right.png"));
@@ -125,13 +132,23 @@ public class Elf extends Enemy {
     public void setImage(Texture image) {
         this.image = image;
     }
-    public boolean istSchwertAusgestreckt() { return SchwertAusgestreckt;}
+    public boolean istSchwertAusgestreckt() { return schwertAusgestreckt;}
+
+    public void jump() {
+        this.velocityY += jumpVelocity * getWeight();
+        canJump = false;
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                canJump = true;
+            }
+        }, 2);
+    }
 
     @Override
     public void render(SpriteBatch batch) {
         batch.draw(image, pos.x, pos.y, getWidth(), getHeight());
         super.render(batch);
-
     }
 
 }
